@@ -1,0 +1,15 @@
+name: publish
+run-name: Publish
+on: workflow_dispatch
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: Setup mill
+        uses: zhutmost/setup-mill@main
+        with:
+          mill-version: 0.11.9
+      - name: Publish
+        run: mill -i mill.contrib.sonatypecentral.SonatypeCentralPublishModule/publishAll --username ${{ secrets.SONATYPE_LOGIN }} --password ${{ secrets.SONATYPE_PASSWORD }} --gpgArgs --passphrase=${{ secrets.GPG_PASSPHRASE }},--no-tty,--pinentry-mode,loopback,--batch,--yes,-a,-b --publishArtifacts __.publishArtifacts
