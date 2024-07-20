@@ -26,8 +26,8 @@
   };
 
   processes = {
-    backend.exec = "cd foxxy; mill -i -j 0 -w devBackend";
-    frontend.exec = "cd foxxy; mill -i -j 0 -w devFrontend";
-    vite.exec = "cd foxxy/modules/reference/frontend_vite && npm install && npm run dev";
+    backend.exec = "mill -i -j 0 -w devBackend";
+    frontend.exec = "mill -i -j 0 -w devFrontend";
+    vite.exec = "cd reference/frontend_vite && npm install && npm run dev";
   };
 }
