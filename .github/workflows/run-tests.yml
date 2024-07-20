@@ -7,7 +7,8 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
-      - uses: zhutmost/setup-mill@main
+      - name: Setup mill
+        uses: zhutmost/setup-mill@main
         with:
           mill-version: 0.11.9
       - name: Compile
