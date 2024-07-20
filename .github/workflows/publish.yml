@@ -11,5 +11,11 @@ jobs:
         uses: zhutmost/setup-mill@main
         with:
           mill-version: 0.11.9
+      -
+        name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Publish
         run: mill -i mill.contrib.sonatypecentral.SonatypeCentralPublishModule/publishAll --username ${{ secrets.SONATYPE_LOGIN }} --password ${{ secrets.SONATYPE_PASSWORD }} --gpgArgs --passphrase=${{ secrets.GPG_PASSPHRASE }},--no-tty,--pinentry-mode,loopback,--batch,--yes,-a,-b --publishArtifacts __.publishArtifacts
