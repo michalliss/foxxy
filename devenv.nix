@@ -1,0 +1,33 @@
+{ pkgs, lib, config, inputs, ... }:
+
+{
+  packages = [
+    pkgs.git
+    pkgs.coreutils
+    pkgs.mill
+    pkgs.nodejs
+    pkgs.jdk17
+  ];
+
+  services.postgres = {
+    enable = true;
+    package = pkgs.postgresql_16;
+
+    initialDatabases = [{ name = "postgres"; }];
+
+    listen_addresses = "localhost";
+    port = 5432;
+
+    initialScript = ''
+      CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'postgres' CREATEDB;                                                     
+      CREATE DATABASE postgres;                                                                                          
+      GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;   
+    '';
+  };
+
+  processes = {
+    backend.exec = "cd foxxy; mill -i -j 0 -w devBackend";
+    frontend.exec = "cd foxxy; mill -i -j 0 -w devFrontend";
+    vite.exec = "cd foxxy/modules/reference/frontend_vite && npm install && npm run dev";
+  };
+}
