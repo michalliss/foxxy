@@ -5,7 +5,9 @@ import foxxy.repo.*
 import zio.*
 
 object Main extends ZIOAppDefault {
-  override def run = ZIO
+  override def run = logic
+
+  def logic = ZIO
     .serviceWithZIO[App](_.logic)
     .provide(
       App.live,

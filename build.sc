@@ -11,7 +11,7 @@ object config {
   val scalaVersion = "3.4.2"
 }
 
-trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule{
+trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
 
   def publishVersion = "0.0.1"
 
@@ -155,10 +155,14 @@ object root extends RootModule {
       )
 
       object test extends ScalaTests {
+        def moduleDeps    = Seq(backend)
         def ivyDeps       = Agg(
           ivy"dev.zio::zio-test:2.1.6",
           ivy"dev.zio::zio-test-sbt:2.1.6",
-          ivy"dev.zio::zio-test-magnolia:2.1.6"
+          ivy"dev.zio::zio-test-magnolia:2.1.6",
+          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.10.15",
+          ivy"org.testcontainers:testcontainers:1.20.0",
+          ivy"org.testcontainers:postgresql:1.20.0"
         )
         def testFramework = "zio.test.sbt.ZTestFramework"
       }

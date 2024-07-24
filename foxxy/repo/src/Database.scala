@@ -11,20 +11,24 @@ import java.util.{Properties, UUID}
 import javax.sql.DataSource
 
 object Database {
-  val postgresFromEnv = {
-    Quill.DataSource.fromDataSource({
-      val props  = new Properties()
-      props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource")
-      props.setProperty("dataSource.user", s"${scala.util.Properties.envOrElse("DB_USER", "postgres")}")
-      props.setProperty("dataSource.password", s"${scala.util.Properties.envOrElse("DB_PASSWORD", "postgres")}")
-      props.setProperty(s"dataSource.serverName", s"${scala.util.Properties.envOrElse("DB_HOST", "localhost")}")
-      props.setProperty(s"dataSource.portNumber", s"${scala.util.Properties.envOrElse("DB_PORT", "5432")}")
-      val config = new HikariConfig(props)
-      val ds     = new HikariDataSource(config)
-      ds
-    }) >+>
-      Quill.Postgres.fromNamingStrategy(SnakeCase)
-  }
+  val postgresFromEnv = for {
+    props <- ZLayer.fromZIO(for {
+               db_user     <- System.env("DB_USER").someOrElse("postgres")
+               db_password <- System.env("DB_PASSWORD").someOrElse("postgres")
+               db_host     <- System.env("DB_HOST").someOrElse("localhost")
+               db_port     <- System.env("DB_PORT").someOrElse("5432")
+             } yield {
+               val props = new Properties()
+               props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource")
+               props.setProperty("dataSource.user", db_user)
+               props.setProperty("dataSource.password", db_password)
+               props.setProperty(s"dataSource.serverName", db_host)
+               props.setProperty(s"dataSource.portNumber", db_port)
+               HikariDataSource(HikariConfig(props))
+             })
+
+    ds <- Quill.DataSource.fromDataSource(props.get[HikariDataSource]) >+> Quill.Postgres.fromNamingStrategy(SnakeCase)
+  } yield ds
 
   final case class Migration(dataSource: DataSource) {
 
