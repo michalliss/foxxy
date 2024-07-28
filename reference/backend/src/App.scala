@@ -81,7 +81,7 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
   def logic = for {
     _ <- migrationService.reset.orDie *> migrationService.migrate.orDie
     _ <- repo.users.c.insert(User(UUID.randomUUID(), "admin", "admin")).orDie
-    _ <- Backend(List(login, register, getTodos, addTodo, updateTodo, removeTodo)).serve
+    _ <- Backend(5004, List(login, register, getTodos, addTodo, updateTodo, removeTodo)).serve
   } yield ()
 }
 

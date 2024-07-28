@@ -14,7 +14,7 @@ import zio.interop.catz.*
 
 type ServerEndpoint = ZServerEndpoint[Any, Any]
 
-case class Backend(endpoints: List[ServerEndpoint]) {
+case class Backend(port: Int, endpoints: List[ServerEndpoint]) {
   val docs                        = SwaggerInterpreter().fromServerEndpoints[Task](endpoints, "app", "1.0.0")
   val allRoutes: HttpRoutes[Task] = ZHttp4sServerInterpreter().from(endpoints ++ docs).toRoutes
 
@@ -26,7 +26,7 @@ case class Backend(endpoints: List[ServerEndpoint]) {
     _ <- ZIO.executor.flatMap(executor =>
            BlazeServerBuilder[Task]
              .withExecutionContext(executor.asExecutionContext)
-             .bindHttp(5004, "localhost")
+             .bindHttp(port, "localhost")
              .withHttpApp(Router("/" -> (cors)).orNotFound)
              .serve
              .compile

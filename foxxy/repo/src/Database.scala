@@ -11,6 +11,7 @@ import java.util.{Properties, UUID}
 import javax.sql.DataSource
 
 object Database {
+  val postgres = Quill.Postgres.fromNamingStrategy(SnakeCase)
   val postgresFromEnv = for {
     props <- ZLayer.fromZIO(for {
                db_user     <- System.env("DB_USER").someOrElse("postgres")
@@ -26,7 +27,6 @@ object Database {
                props.setProperty(s"dataSource.portNumber", db_port)
                HikariDataSource(HikariConfig(props))
              })
-
     ds <- Quill.DataSource.fromDataSource(props.get[HikariDataSource]) >+> Quill.Postgres.fromNamingStrategy(SnakeCase)
   } yield ds
 
@@ -35,7 +35,6 @@ object Database {
     val migrate: Task[Unit] =
       for {
         flyway <- loadFlyway
-        _      <- Console.printLine(flyway.getConfiguration.getLocations.toList)
         _      <- ZIO.attempt(flyway.migrate())
       } yield ()
 
@@ -43,7 +42,6 @@ object Database {
       for {
         _      <- ZIO.debug("RESETTING DATABASE!")
         flyway <- loadFlyway
-        _      <- Console.printLine(flyway.getConfiguration.getLocations.toList)
         _      <- ZIO.attempt(flyway.clean())
         _      <- ZIO.attempt(flyway.migrate())
       } yield ()

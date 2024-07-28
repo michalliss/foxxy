@@ -3,18 +3,15 @@ package foxxy.reference.backend
 import foxxy.auth.*
 import foxxy.repo.*
 import zio.*
+import javax.sql.DataSource
 
 object Main extends ZIOAppDefault {
-  override def run = logic
 
-  def logic = ZIO
+  override def run = logic.exitCode
+
+  def logicWithoutDb = ZIO
     .serviceWithZIO[App](_.logic)
-    .provide(
-      App.live,
-      Database.postgresFromEnv,
-      Database.Migration.live,
-      AuthService.live,
-      Schema.live,
-      Repository.live
-    )
+    .provideSome[DataSource](Database.postgres, Database.Migration.live, Schema.live, AuthService.live, Repository.live, App.live)
+
+  def logic = logicWithoutDb.provide(Database.postgresFromEnv)
 }
