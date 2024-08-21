@@ -73,7 +73,7 @@ object external {
 
   def flyway = Agg(
     ivy"org.flywaydb:flyway-core:10.15.2",
-    ivy"org.flywaydb:flyway-database-postgresql:10.15.2"
+    ivy"org.flywaydb:flyway-database-postgresql:10.15.2",
   )
 
   def http4s = Agg(
@@ -162,7 +162,8 @@ object root extends RootModule {
           ivy"dev.zio::zio-test-magnolia:2.1.6",
           ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.10.15",
           ivy"org.testcontainers:testcontainers:1.20.0",
-          ivy"org.testcontainers:postgresql:1.20.0"
+          ivy"org.testcontainers:postgresql:1.20.0",
+          ivy"org.slf4j:slf4j-nop:2.0.16"
         )
         def testFramework = "zio.test.sbt.ZTestFramework"
       }

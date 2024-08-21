@@ -5,32 +5,34 @@ import org.http4s.*
 import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.Router
 import org.http4s.server.middleware.CORS
-import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
-import sttp.tapir.ztapir.*
 import zio.*
 import zio.interop.catz.*
 
-type ServerEndpoint = ZServerEndpoint[Any, Any]
+case class Backend(config: BackendConfig) {
+  def serve(routes: List[FoxxyServerEndpoint]) = {
+    val docs                        = SwaggerInterpreter().fromServerEndpoints[Task](routes, "app", "1.0.0")
+    val allRoutes: HttpRoutes[Task] = ZHttp4sServerInterpreter().from(routes ++ docs).toRoutes
 
-case class Backend(port: Int, endpoints: List[ServerEndpoint]) {
-  val docs                        = SwaggerInterpreter().fromServerEndpoints[Task](endpoints, "app", "1.0.0")
-  val allRoutes: HttpRoutes[Task] = ZHttp4sServerInterpreter().from(endpoints ++ docs).toRoutes
+    val cors = CORS.policy.withAllowOriginAll.withAllowMethodsAll
+      .withAllowCredentials(false)
+      .apply(allRoutes)
 
-  val cors = CORS.policy.withAllowOriginAll.withAllowMethodsAll
-    .withAllowCredentials(false)
-    .apply(allRoutes)
+    for {
+      _ <- ZIO.executor.flatMap(executor =>
+             BlazeServerBuilder[Task]
+               .withExecutionContext(executor.asExecutionContext)
+               .bindHttp(config.port, "localhost")
+               .withHttpApp(Router("/" -> (cors)).orNotFound)
+               .serve
+               .compile
+               .drain
+           )
+    } yield ()
+  }
+}
 
-  val serve = for {
-    _ <- ZIO.executor.flatMap(executor =>
-           BlazeServerBuilder[Task]
-             .withExecutionContext(executor.asExecutionContext)
-             .bindHttp(port, "localhost")
-             .withHttpApp(Router("/" -> (cors)).orNotFound)
-             .serve
-             .compile
-             .drain
-         )
-  } yield ()
+object Backend {
+  def live = ZLayer.derive[Backend]
 }

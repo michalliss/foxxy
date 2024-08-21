@@ -40,7 +40,7 @@ object Database {
 
     val reset: Task[Unit] =
       for {
-        _      <- ZIO.debug("RESETTING DATABASE!")
+        _      <- ZIO.log("RESETTING DATABASE!")
         flyway <- loadFlyway
         _      <- ZIO.attempt(flyway.clean())
         _      <- ZIO.attempt(flyway.migrate())
