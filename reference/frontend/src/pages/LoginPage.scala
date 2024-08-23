@@ -5,7 +5,7 @@ import be.doeraene.webcomponents.ui5.Input
 import be.doeraene.webcomponents.ui5.Toast
 import be.doeraene.webcomponents.ui5.configkeys.ButtonType
 import be.doeraene.webcomponents.ui5.configkeys.InputType
-import com.raquo.laminar.api.L.{*}
+import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.Router
 import foxxy.frontend.utils.*
 import foxxy.reference.frontend.Page

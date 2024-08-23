@@ -10,7 +10,7 @@ import foxxy.shared.Unauthorized
 import com.raquo.waypoint.Router
 import foxxy.reference.frontend.Page
 
-case class MyHttpClient(storage: Storage, router: Router[Page]) {
+case class MyHttpClient(storage: Storage, router: Router[Page], authSerivce: AuthService) {
 
   def fetchToken  = storage.get[String]("token")
   def backendHost = "localhost:5004"
@@ -20,7 +20,7 @@ case class MyHttpClient(storage: Storage, router: Router[Page]) {
       def sendSecure = {
         foxxy.frontend.utils
         .sendSecure(endpoint)(Uri(backendHost))(fetchToken.getOrElse("no_token"))
-        .andThen(x => x.tapSome{ case Left(Unauthorized(msg)) => ZIO.attempt(router.pushState(Page.Login))})
+        .andThen(x => x.tapSome{ case Left(Unauthorized(msg)) => ZIO.attempt{authSerivce.logout; router.pushState(Page.Login)}})
       }
 
     extension [T1, T2, T3](endpoint: Endpoint[Unit, T1, DefaultErrors, T3, Any])

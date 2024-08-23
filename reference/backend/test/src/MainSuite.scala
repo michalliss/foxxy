@@ -11,7 +11,6 @@ import zio.*
 import zio.test.*
 
 object EndToEndSpec extends ZIOSpecDefault {
-
   def spec = suite("End to end tests")(
     suite("Unauthorized login test")(
       test("Login with invalid credentials should return Unauthorized") {

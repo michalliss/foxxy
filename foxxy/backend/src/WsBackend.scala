@@ -1,6 +1,5 @@
 package foxxy.backend
 
-import cats.syntax.all.*
 import org.http4s.*
 import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.Router

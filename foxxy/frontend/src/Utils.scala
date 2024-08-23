@@ -1,12 +1,15 @@
 package foxxy.frontend.utils
 
-import com.raquo.laminar.api.L.{*}
-import com.raquo.waypoint.Router
+import com.raquo.laminar.api.L.*
+import com.raquo.laminar.nodes.ReactiveHtmlElement
+import com.raquo.waypoint.*
 import org.scalajs.dom
+import org.scalajs.dom.HTMLDivElement
 import sttp.client3.*
 import sttp.client3.impl.zio.FetchZioBackend
 import sttp.model.Uri
 import sttp.tapir.DecodeResult.*
+import sttp.tapir.Endpoint
 import sttp.tapir.PublicEndpoint
 import sttp.tapir.client.sttp.SttpClientInterpreter
 import zio.*
@@ -17,10 +20,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-import com.raquo.waypoint.*
-import com.raquo.laminar.nodes.ReactiveHtmlElement
-import org.scalajs.dom.HTMLDivElement
-import sttp.tapir.Endpoint
 
 extension [E, A](effect: ZIO[Any, E, A])
   def toFutureUnsafe =

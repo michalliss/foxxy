@@ -1,21 +1,20 @@
 package foxxy.reference.frontend
 
-import com.raquo.laminar.api.L.{*}
+import be.doeraene.webcomponents.ui5.Button
+import be.doeraene.webcomponents.ui5.ShellBar
+import be.doeraene.webcomponents.ui5.SideNavigation
+import be.doeraene.webcomponents.ui5.configkeys.IconName
+import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.*
 import foxxy.frontend.utils.*
+import foxxy.reference.frontend.pages.TodoListPage
 import zio.*
 import zio.json.JsonCodec
+import zio.stream.ZStream
 
 import pages.LoginPage
 import pages.RegisterPage
-import services.Storage
 import services.*
-import foxxy.reference.frontend.pages.TodoListPage
-import be.doeraene.webcomponents.ui5.ShellBar
-import be.doeraene.webcomponents.ui5.Button
-import be.doeraene.webcomponents.ui5.SideNavigation
-import be.doeraene.webcomponents.ui5.configkeys.IconName
-import zio.stream.ZStream
 
 enum Page derives JsonCodec:
   case Home
@@ -118,7 +117,6 @@ object App extends ZIOAppDefault {
   override def run = makeFrontend(router, renderPage)
     .provide(
       ZLayer.derive[HomePage],
-      ZLayer.derive[TimeService],
       ZLayer.derive[LoginPage],
       ZLayer.derive[RegisterPage],
       ZLayer.derive[TodoListPage],

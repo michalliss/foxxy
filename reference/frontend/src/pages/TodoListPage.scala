@@ -1,8 +1,9 @@
 package foxxy.reference.frontend.pages
 
 import be.doeraene.webcomponents.ui5.Button
+import be.doeraene.webcomponents.ui5.Input
 import be.doeraene.webcomponents.ui5.UList
-import com.raquo.laminar.api.L.{*}
+import com.raquo.laminar.api.L.*
 import foxxy.frontend.utils.*
 import foxxy.reference.frontend.services.*
 import foxxy.reference.shared.Endpoints
@@ -14,46 +15,84 @@ import zio.*
 import java.util.UUID
 import com.raquo.waypoint.Router
 import foxxy.reference.frontend.Page
-import be.doeraene.webcomponents.ui5.Input
 
-case class TodoListPage(storage: Storage, httpClient: MyHttpClient, router: Router[Page]) {
+case class TodoListPage(httpClient: MyHttpClient, authService: AuthService, router: Router[Page]) {
   import httpClient.extensions._
 
-  val getTodos   = Endpoints.getTodos.sendSecure(())
-  val addTodo    = (name: String) => Endpoints.addTodo.sendSecure(AddTodoRequest(name))
-  val updateTodo = (id: UUID, completed: Boolean) => Endpoints.updateTodo.sendSecure(id, UpdateTodoRequest(completed))
-  val removeTodo = (id: UUID) => Endpoints.removeTodo.sendSecure(id)
+  sealed trait Command;
+  object Command {
+    case class Add(name: String)    extends Command
+    case class Delete(id: UUID)     extends Command
+    case class Filter(text: String) extends Command
+  }
 
   def create = ZIO.attempt {
-    val text            = Var("")
-    val update          = EventBus[Unit]()
-    val addAndUpdate    = (x: String) => addTodo(x).tap(_ => ZIO.attempt(update.emit(())))
-    val deleteAndUpdate = (x: UUID) => removeTodo(x).tap(_ => ZIO.attempt(update.emit(())))
-    val displayTodos    = update.events.flatMapSwitch(_ => getTodos.toEventStream)
 
-    def renderItem(todo: TodoResponse) = {
-      hDivA(
-        maxWidth.em(40),
-        justifyContent.spaceBetween,
-        hDivA(
-          alignItems.center,
-          gap.em(0.5),
-          // CheckBox(_.checked := todo.completed, 0.mapToValue --> {x => updateAndUpdate(todo.id, x).toFutureUnsafe}),
-          p(todo.text)
-        ),
-        Button("Remove", onClick.mapToUnit --> { _ => deleteAndUpdate(todo.id).toFutureUnsafe })
-      )
+
+    val items  = Var(List.empty[TodoResponse])
+    val filter = Var("")
+
+    def fetchItems = Endpoints.getTodos.sendSecure(()).right.tap(x => ZIO.attempt(items.set(x)))
+
+    val commandObserver = Observer[Command] {
+      case Command.Add(name)    => (Endpoints.addTodo.sendSecure(AddTodoRequest(name)) *> fetchItems).toFutureUnsafe
+      case Command.Delete(id)   => (Endpoints.removeTodo.sendSecure(id) *> fetchItems).toFutureUnsafe
+      case Command.Filter(text) => filter.set(text)
+    }
+
+    val filteredItems = items.signal.combineWith(filter.signal).map { case (items, filter) =>
+      items.filter(_.text.contains(filter))
     }
 
     vDiv(
       alignItems.center,
       vDivA(
         width.em(40),
-        Input(onChange.mapToValue --> text, width.percent(100)),
-        Button("Add todo", onClick.mapTo(text.now()) --> { x => addAndUpdate(x).toFutureUnsafe }),
-        UList(children <-- displayTodos.collectRight.map(_.map { x => renderItem(x) })),
-        onMountCallback(_ => update.emit(()))
+        SearchComponent(commandObserver),
+        AddComponent(commandObserver),
+        child <-- filteredItems.signal.map(items => ListComponent(items, onRemove = commandObserver)),
+        onMountCallback(_ => fetchItems.toEventStream)
       )
     )
   }
+
+  def SearchComponent(onSearch: Observer[Command.Filter]) = {
+    Input(
+      width.percent(100),
+      placeholder := "Search",
+      onInput.mapToValue.map(Command.Filter.apply) --> onSearch
+    )
+  }
+
+  def AddComponent(onSubmit: Observer[Command.Add]) = {
+    val text = Var("")
+    vDivA(
+      Input(onChange.mapToValue --> text, width.percent(100)),
+      Button("Add todo", onClick.mapTo(Command.Add(text.now())) --> onSubmit)
+    )
+  }
+
+  def ItemComponent(item: TodoResponse, onRemove: Observer[Unit]) = {
+    hDivA(
+      maxWidth.em(40),
+      justifyContent.spaceBetween,
+      hDivA(
+        alignItems.center,
+        gap.em(0.5),
+        // CheckBox(_.checked := todo.completed, 0.mapToValue --> {x => updateAndUpdate(todo.id, x).toFutureUnsafe}),
+        p(item.text)
+      ),
+      Button("Remove", onClick.mapToUnit --> onRemove)
+    )
+  }
+
+  def ListComponent(items: List[TodoResponse], onRemove: Observer[Command.Delete]) = {
+    UList(
+      items.map { item =>
+        ItemComponent(item, onRemove.contramap(_ => Command.Delete(item.id)))
+      }
+    )
+  }
+
+  val updateTodo = (id: UUID, completed: Boolean) => Endpoints.updateTodo.sendSecure(id, UpdateTodoRequest(completed))
 }

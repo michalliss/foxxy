@@ -2,17 +2,15 @@ package foxxy.reference.backend
 
 import foxxy.auth.*
 import foxxy.backend.*
+import foxxy.reference.shared.Endpoints
+import foxxy.reference.shared.Endpoints.TodoResponse
+import foxxy.reference.shared.domain.*
+import foxxy.reference.shared.domain.User
 import foxxy.repo.*
 import foxxy.shared.*
-import foxxy.reference.shared.domain.*
 import sttp.tapir.*
 import sttp.tapir.ztapir.*
 import zio.*
-
-import java.util.UUID
-import foxxy.reference.shared.domain.User
-import foxxy.reference.shared.Endpoints
-import foxxy.reference.shared.Endpoints.TodoResponse
 
 case class App(migrationService: Database.Migration, auth: AuthService, repo: Repository, backend: Backend) {
 
