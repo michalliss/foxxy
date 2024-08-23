@@ -15,12 +15,13 @@ object Main extends ZIOAppDefault {
     .serviceWithZIO[App](_.logic)
     .provideSome[DataSource & BackendConfig](
       Backend.live,
-      Database.postgres, 
-      Database.Migration.live, 
-      Schema.live, 
-      AuthService.live, 
-      Repository.live, 
-      App.live)
+      Database.postgres,
+      Database.Migration.live,
+      Schema.live,
+      AuthService.live,
+      Repository.live,
+      App.live
+    )
 
   def logic = configurableLogic.provide(Database.postgresFromEnv, BackendConfig.withPort(5004))
 }

@@ -15,4 +15,3 @@ case class Schema(quill: Quill.Postgres[SnakeCase]) {
 object Schema {
   val live = ZLayer.derive[Schema]
 }
-

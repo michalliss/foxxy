@@ -24,7 +24,6 @@ case class TodoListPage(httpClient: MyHttpClient, authService: AuthService, rout
 
   def create = ZIO.attempt {
 
-
     val items  = Var(List.empty[TodoResponse])
     val filter = Var("")
 

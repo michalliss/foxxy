@@ -11,7 +11,7 @@ import java.util.{Properties, UUID}
 import javax.sql.DataSource
 
 object Database {
-  val postgres = Quill.Postgres.fromNamingStrategy(SnakeCase)
+  val postgres        = Quill.Postgres.fromNamingStrategy(SnakeCase)
   val postgresFromEnv = for {
     props <- ZLayer.fromZIO(for {
                db_user     <- System.env("DB_USER").someOrElse("postgres")
@@ -27,7 +27,7 @@ object Database {
                props.setProperty(s"dataSource.portNumber", db_port)
                HikariDataSource(HikariConfig(props))
              })
-    ds <- Quill.DataSource.fromDataSource(props.get[HikariDataSource]) >+> Quill.Postgres.fromNamingStrategy(SnakeCase)
+    ds    <- Quill.DataSource.fromDataSource(props.get[HikariDataSource]) >+> Quill.Postgres.fromNamingStrategy(SnakeCase)
   } yield ds
 
   final case class Migration(dataSource: DataSource) {
