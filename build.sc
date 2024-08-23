@@ -173,7 +173,7 @@ object root extends RootModule {
 
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
-        override def ivyDeps = Agg(
+        override def ivyDeps    = Agg(
           ivy"dev.zio::zio-test:2.1.7",
           ivy"dev.zio::zio-test-sbt:2.1.7",
           ivy"dev.zio::zio-test-magnolia:2.1.7",

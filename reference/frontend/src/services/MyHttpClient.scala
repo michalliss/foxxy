@@ -18,8 +18,8 @@ case class MyHttpClient(storage: Storage, router: Router[Page], authSerivce: Aut
     extension [T1, T2, T3](endpoint: Endpoint[String, T1, DefaultErrors, T3, Any])
       def sendSecure = {
         foxxy.frontend.utils
-        .sendSecure(endpoint)(Uri(backendHost))(fetchToken.getOrElse("no_token"))
-        .andThen(x => x.tapSome{ case Left(Unauthorized(msg)) => ZIO.attempt{authSerivce.logout; router.pushState(Page.Login)}})
+          .sendSecure(endpoint)(Uri(backendHost))(fetchToken.getOrElse("no_token"))
+          .andThen(x => x.tapSome { case Left(Unauthorized(msg)) => ZIO.attempt { authSerivce.logout; router.pushState(Page.Login) } })
       }
 
     extension [T1, T2, T3](endpoint: Endpoint[Unit, T1, DefaultErrors, T3, Any])

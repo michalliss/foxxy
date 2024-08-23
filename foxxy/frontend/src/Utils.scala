@@ -33,7 +33,6 @@ extension [E](effect: ZIO[Any, E, HtmlElement])
   def asChildWithLoading(x: HtmlElement) = child <-- EventStream.fromFuture(effect.toFutureUnsafe).toSignal(x)
 
 extension [E, A](stream: ZStream[Any, E, A])
-
   def toEventStream = {
     val endStreamPromise = scala.concurrent.Promise[Unit]()
     EventStream.fromCustomSource[A](
@@ -73,10 +72,11 @@ extension [T1, T2, T3, T4](endpoint: Endpoint[T1, T2, T3, T4, Any])
       .andThen(x =>
         x.andThen(x =>
           x
-          .map(_ match
-            case Value(v) => Some(v)
-            case _        => None
-          ).mapError(x => SendError.UnknownError(x))
+            .map(_ match
+              case Value(v) => Some(v)
+              case _        => None
+            )
+            .mapError(x => SendError.UnknownError(x))
             .someOrFail(SendError.DecodeError)
             .map(x => x)
         )

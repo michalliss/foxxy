@@ -19,4 +19,3 @@ final case class Storage() {
     dom.window.localStorage.removeItem(key)
   }
 }
-
