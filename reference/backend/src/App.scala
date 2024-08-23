@@ -1,20 +1,17 @@
 package foxxy.reference.backend
 
-import foxxy.auth.*
-import foxxy.backend.*
-import foxxy.repo.*
-import foxxy.shared.*
-import foxxy.reference.shared.domain.*
-import sttp.tapir.*
-import sttp.tapir.ztapir.*
-import zio.*
-
-import java.util.UUID
-import foxxy.reference.shared.domain.User
+import foxxy.auth._
+import foxxy.backend._
 import foxxy.reference.shared.Endpoints
 import foxxy.reference.shared.Endpoints.TodoResponse
+import foxxy.reference.shared.domain._
+import foxxy.repo._
+import foxxy.shared._
+import sttp.tapir._
+import sttp.tapir.ztapir._
+import zio._
 
-case class App(migrationService: Database.Migration, auth: AuthService, repo: Repository) {
+case class App(migrationService: Database.Migration, auth: AuthService, repo: Repository, backend: Backend) {
 
   def securityLogic(token: String) =
     (for {
@@ -24,17 +21,18 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
       .orElseFail(Unauthorized(""))
       .someOrFail(Unauthorized(""))
 
-  def register: ServerEndpoint = Endpoints.register
+  def register: FoxxyServerEndpoint = Endpoints.register
     .zServerLogic { req =>
       for {
         hash  <- auth.encryptPassword(req.password).orElseFail(BadRequest("Failed to hash password"))
-        user   = User(java.util.UUID.randomUUID(), req.name, hash)
+        id    <- Random.nextUUID
+        user   = User(id, req.name, hash)
         _     <- repo.users.c.insert(user).orElseFail(BadRequest("Failed to insert user"))
         token <- auth.generateJwt(user.name).orElseFail(BadRequest("Invalid credentials"))
       } yield token
     }
 
-  def login: ServerEndpoint = Endpoints.login
+  def login: FoxxyServerEndpoint = Endpoints.login
     .zServerLogic { req =>
       for {
         user  <- repo.users.byUsername(req.name).orElseFail(BadRequest("Failed to find user")).someOrFail(Unauthorized(""))
@@ -43,7 +41,7 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
       } yield token
     }
 
-  def getTodos: ServerEndpoint = Endpoints.getTodos
+  def getTodos: FoxxyServerEndpoint = Endpoints.getTodos
     .zServerSecurityLogic(securityLogic)
     .serverLogic { user => _ =>
       for {
@@ -51,16 +49,17 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
       } yield todos.map(x => TodoResponse(x.id, x.text, x.completed))
     }
 
-  def addTodo: ServerEndpoint = Endpoints.addTodo
+  def addTodo: FoxxyServerEndpoint = Endpoints.addTodo
     .zServerSecurityLogic(securityLogic)
     .serverLogic { user => req =>
-      val todo = TodoItem(UUID.randomUUID(), user.id, req.text, completed = false)
       for {
-        _ <- repo.todoItems.c.insert(todo).orElseFail(BadRequest("Failed to insert todo"))
+        id  <- Random.nextUUID
+        todo = TodoItem(id, user.id, req.text, completed = false)
+        _   <- repo.todoItems.c.insert(todo).orElseFail(BadRequest("Failed to insert todo"))
       } yield TodoResponse(todo.id, todo.text, todo.completed)
     }
 
-  def updateTodo: ServerEndpoint = Endpoints.updateTodo
+  def updateTodo: FoxxyServerEndpoint = Endpoints.updateTodo
     .zServerSecurityLogic(securityLogic)
     .serverLogic { user => (id, req) =>
       for {
@@ -69,7 +68,7 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
       } yield TodoResponse(todo.id, todo.text, todo.completed)
     }
 
-  def removeTodo: ServerEndpoint = Endpoints.removeTodo
+  def removeTodo: FoxxyServerEndpoint = Endpoints.removeTodo
     .zServerSecurityLogic(securityLogic)
     .serverLogic { user => id =>
       for {
@@ -79,9 +78,10 @@ case class App(migrationService: Database.Migration, auth: AuthService, repo: Re
     }
 
   def logic = for {
-    _ <- migrationService.reset.orDie *> migrationService.migrate.orDie
-    _ <- repo.users.c.insert(User(UUID.randomUUID(), "admin", "admin")).orDie
-    _ <- Backend(List(login, register, getTodos, addTodo, updateTodo, removeTodo)).serve
+    _  <- migrationService.reset.orDie *> migrationService.migrate.orDie
+    id <- Random.nextUUID
+    _  <- repo.users.c.insert(User(id, "admin", "admin")).orDie
+    _  <- backend.serve(List(login, register, getTodos, addTodo, updateTodo, removeTodo))
   } yield ()
 }
 
