@@ -1,11 +1,11 @@
 package foxxy.reference.backend
 
-import foxxy.auth.*
-import foxxy.repo.*
-import zio.*
+import foxxy.auth._
+import foxxy.backend.{Backend, BackendConfig}
+import foxxy.repo._
+import zio._
+
 import javax.sql.DataSource
-import foxxy.backend.BackendConfig
-import foxxy.backend.Backend
 
 object Main extends ZIOAppDefault {
 

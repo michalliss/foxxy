@@ -1,19 +1,16 @@
 package foxxy.reference.frontend.pages
 
-import be.doeraene.webcomponents.ui5.Button
-import be.doeraene.webcomponents.ui5.Input
-import be.doeraene.webcomponents.ui5.Toast
-import be.doeraene.webcomponents.ui5.configkeys.ButtonType
-import be.doeraene.webcomponents.ui5.configkeys.InputType
-import com.raquo.laminar.api.L.*
+import be.doeraene.webcomponents.ui5.configkeys.{ButtonType, InputType}
+import be.doeraene.webcomponents.ui5.{Button, Input, Toast}
+import com.raquo.laminar.api.L._
 import com.raquo.waypoint.Router
-import foxxy.frontend.utils.*
+import foxxy.frontend.utils._
 import foxxy.reference.frontend.Page
 import foxxy.reference.frontend.services.Storage
 import foxxy.reference.shared.Endpoints
 import foxxy.reference.shared.Endpoints.LoginRequest
 import sttp.model.Uri
-import zio.*
+import zio._
 
 case class LoginPage(storage: Storage, router: Router[Page]) {
   def create = ZIO.attempt {

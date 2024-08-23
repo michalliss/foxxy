@@ -1,7 +1,7 @@
 package foxxy.backend
 
-import cats.syntax.all.*
-import zio.*
+import cats.syntax.all._
+import zio._
 
 case class BackendConfig(port: Int)
 

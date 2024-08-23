@@ -1,7 +1,8 @@
 package foxxy.reference.backend
 
-import foxxy.reference.shared.domain.*
-import foxxy.repo.*
+import foxxy.reference.shared.domain._
+import foxxy.repo._
+
 import java.util.UUID
 
 case class TodoItemDB(id: UUID, userId: UUID, text: String, completed: Boolean)

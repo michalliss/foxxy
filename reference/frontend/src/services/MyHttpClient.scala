@@ -1,14 +1,13 @@
 package foxxy.reference.frontend.services
 
-import foxxy.frontend.utils.*
+import com.raquo.waypoint.Router
+import foxxy.frontend.utils._
+import foxxy.reference.frontend.Page
+import foxxy.shared.{DefaultErrors, Unauthorized}
 import sttp.model.Uri
 import sttp.tapir.Endpoint
-import zio.* 
+import zio._
 import zio.json.JsonCodec
-import foxxy.shared.DefaultErrors
-import foxxy.shared.Unauthorized
-import com.raquo.waypoint.Router
-import foxxy.reference.frontend.Page
 
 case class MyHttpClient(storage: Storage, router: Router[Page], authSerivce: AuthService) {
 

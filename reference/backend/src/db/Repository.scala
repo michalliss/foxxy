@@ -1,9 +1,9 @@
 package foxxy.reference.backend
 
-import foxxy.reference.shared.domain.*
-import foxxy.repo.*
-import io.getquill.*
-import zio.*
+import foxxy.reference.shared.domain._
+import foxxy.repo._
+import io.getquill._
+import zio._
 
 import java.util.UUID
 import javax.sql.DataSource

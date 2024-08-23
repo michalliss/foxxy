@@ -1,20 +1,16 @@
 package foxxy.reference.frontend.pages
 
-import be.doeraene.webcomponents.ui5.Button
-import be.doeraene.webcomponents.ui5.Input
-import be.doeraene.webcomponents.ui5.UList
-import com.raquo.laminar.api.L.*
-import foxxy.frontend.utils.*
-import foxxy.reference.frontend.services.*
+import be.doeraene.webcomponents.ui5.{Button, Input, UList}
+import com.raquo.laminar.api.L._
+import com.raquo.waypoint.Router
+import foxxy.frontend.utils._
+import foxxy.reference.frontend.Page
+import foxxy.reference.frontend.services._
 import foxxy.reference.shared.Endpoints
-import foxxy.reference.shared.Endpoints.AddTodoRequest
-import foxxy.reference.shared.Endpoints.TodoResponse
-import foxxy.reference.shared.Endpoints.UpdateTodoRequest
-import zio.*
+import foxxy.reference.shared.Endpoints.{AddTodoRequest, TodoResponse, UpdateTodoRequest}
+import zio._
 
 import java.util.UUID
-import com.raquo.waypoint.Router
-import foxxy.reference.frontend.Page
 
 case class TodoListPage(httpClient: MyHttpClient, authService: AuthService, router: Router[Page]) {
   import httpClient.extensions._
