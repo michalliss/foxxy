@@ -71,7 +71,7 @@ object external {
 
   def quill = Agg(
     ivy"io.getquill::quill-jdbc-zio:4.8.5",
-    ivy"org.postgresql:postgresql:42.7.3"
+    ivy"org.postgresql:postgresql:42.7.4"
   )
 
   def flyway = Agg(
@@ -173,7 +173,7 @@ object root extends RootModule {
 
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
-        override def ivyDeps = Agg(
+        override def ivyDeps    = Agg(
           ivy"dev.zio::zio-test:2.1.7",
           ivy"dev.zio::zio-test-sbt:2.1.7",
           ivy"dev.zio::zio-test-magnolia:2.1.7",
