@@ -16,7 +16,7 @@ object config {
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
 
-  def publishVersion = "0.0.1"
+  def publishVersion = "0.0.2"
 
   def pomSettings = PomSettings(
     description = "Hello",
