@@ -1,7 +1,7 @@
 package foxxy.reference.backend
 
-import foxxy.reference.shared.domain._
-import foxxy.repo._
+import foxxy.reference.shared.domain.*
+import foxxy.repo.*
 
 import java.util.UUID
 

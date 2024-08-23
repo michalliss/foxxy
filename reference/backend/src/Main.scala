@@ -1,9 +1,9 @@
 package foxxy.reference.backend
 
-import foxxy.auth._
+import foxxy.auth.*
 import foxxy.backend.{Backend, BackendConfig}
-import foxxy.repo._
-import zio._
+import foxxy.repo.*
+import zio.*
 
 import javax.sql.DataSource
 

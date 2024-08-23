@@ -1,10 +1,10 @@
 package foxxy.repo
 
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
-import io.getquill._
+import io.getquill.*
 import io.getquill.jdbczio.Quill
 import org.flywaydb.core.Flyway
-import zio._
+import zio.*
 
 import java.sql.SQLException
 import java.util.{Properties, UUID}

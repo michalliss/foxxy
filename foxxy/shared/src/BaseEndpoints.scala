@@ -1,8 +1,8 @@
 package foxxy.shared
 
 import sttp.model.StatusCode
-import sttp.tapir._
-import zio.json._
+import sttp.tapir.*
+import zio.json.*
 
 object BaseEndpoints {
   val publicEndpoint = endpoint.errorOut(

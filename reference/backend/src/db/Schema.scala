@@ -1,9 +1,9 @@
 package foxxy.reference.backend
 
-import foxxy.repo._
-import io.getquill._
+import foxxy.repo.*
+import io.getquill.*
 import io.getquill.jdbczio.Quill
-import zio._
+import zio.*
 
 case class Schema(quill: Quill.Postgres[SnakeCase]) {
   import quill.*

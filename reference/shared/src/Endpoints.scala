@@ -1,10 +1,10 @@
 package foxxy.reference.shared
 
 import foxxy.shared.BaseEndpoints.{publicEndpoint, secureEndpoint}
-import sttp.tapir._
-import sttp.tapir.generic.auto._
-import sttp.tapir.json.zio._
-import zio.json._
+import sttp.tapir.*
+import sttp.tapir.generic.auto.*
+import sttp.tapir.json.zio.*
+import zio.json.*
 
 import java.util.UUID
 

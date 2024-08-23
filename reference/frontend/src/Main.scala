@@ -2,17 +2,17 @@ package foxxy.reference.frontend
 
 import be.doeraene.webcomponents.ui5.configkeys.IconName
 import be.doeraene.webcomponents.ui5.{Button, ShellBar, SideNavigation}
-import com.raquo.laminar.api.L._
-import com.raquo.waypoint._
-import foxxy.frontend.utils._
+import com.raquo.laminar.api.L.*
+import com.raquo.waypoint.*
+import foxxy.frontend.utils.*
 import foxxy.reference.frontend.pages.TodoListPage
-import zio._
+import zio.*
 import zio.json.JsonCodec
 import zio.stream.ZStream
 
 import pages.LoginPage
 import pages.RegisterPage
-import services._
+import services.*
 
 enum Page derives JsonCodec:
   case Home

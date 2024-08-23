@@ -1,14 +1,14 @@
 package foxxy.reference.frontend.pages
 
 import be.doeraene.webcomponents.ui5.{Button, Input, UList}
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.Router
-import foxxy.frontend.utils._
+import foxxy.frontend.utils.*
 import foxxy.reference.frontend.Page
-import foxxy.reference.frontend.services._
+import foxxy.reference.frontend.services.*
 import foxxy.reference.shared.Endpoints
 import foxxy.reference.shared.Endpoints.{AddTodoRequest, TodoResponse, UpdateTodoRequest}
-import zio._
+import zio.*
 
 import java.util.UUID
 

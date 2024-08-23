@@ -148,6 +148,16 @@ object root extends RootModule {
       override def moduleDeps                     = Seq(shared.js)
       override def ivyDeps                        = external.frontend
     }
+
+    object testing extends AppScalaModule with FoxxyPublish {
+      override def ivyDeps = Agg(
+        ivy"com.zaxxer:HikariCP:5.1.0",
+        ivy"dev.zio::zio:2.1.7",
+        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.1",
+        ivy"org.testcontainers:testcontainers:1.20.1",
+        ivy"org.testcontainers:postgresql:1.20.1"
+      )
+    }
   }
 
   object reference extends Module {
@@ -162,6 +172,7 @@ object root extends RootModule {
       )
 
       object test extends ScalaTests with TestModule.ZioTest {
+        override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
         override def ivyDeps = Agg(
           ivy"dev.zio::zio-test:2.1.7",
           ivy"dev.zio::zio-test-sbt:2.1.7",

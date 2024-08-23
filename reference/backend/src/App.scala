@@ -1,15 +1,15 @@
 package foxxy.reference.backend
 
-import foxxy.auth._
-import foxxy.backend._
+import foxxy.auth.*
+import foxxy.backend.*
 import foxxy.reference.shared.Endpoints
 import foxxy.reference.shared.Endpoints.TodoResponse
-import foxxy.reference.shared.domain._
-import foxxy.repo._
-import foxxy.shared._
-import sttp.tapir._
-import sttp.tapir.ztapir._
-import zio._
+import foxxy.reference.shared.domain.*
+import foxxy.repo.*
+import foxxy.shared.*
+import sttp.tapir.*
+import sttp.tapir.ztapir.*
+import zio.*
 
 case class App(migrationService: Database.Migration, auth: AuthService, repo: Repository, backend: Backend) {
 

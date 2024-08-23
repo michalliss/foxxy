@@ -1,13 +1,13 @@
 package foxxy.backend
 
-import org.http4s._
+import org.http4s.*
 import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.Router
 import org.http4s.server.middleware.CORS
 import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
-import zio._
-import zio.interop.catz._
+import zio.*
+import zio.interop.catz.*
 
 case class Backend(config: BackendConfig) {
   def serve(routes: List[FoxxyServerEndpoint]) = {

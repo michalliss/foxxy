@@ -1,5 +1,5 @@
 package foxxy.backend
 
-import sttp.tapir.ztapir._
+import sttp.tapir.ztapir.*
 
 type FoxxyServerEndpoint = ZServerEndpoint[Any, Any]
