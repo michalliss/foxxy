@@ -3,6 +3,7 @@ package foxxy.testing
 import sttp.client3.HttpClientSyncBackend
 import sttp.model.Uri
 import sttp.tapir.*
+import sttp.tapir.DecodeResult.Value
 import sttp.tapir.client.sttp.SttpClientInterpreter
 import zio.*
 
@@ -10,11 +11,14 @@ import java.net.ServerSocket
 import scala.util.{Try, Using}
 
 case class TestClient(port: Int) {
-  def send[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any], params: I): Task[DecodeResult[Either[E, O]]] =
+  def send[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any], params: I): Task[Either[E, O]] =
     ZIO.attempt {
       val client =
         SttpClientInterpreter().toClient(endpoint, Some(Uri.parse(s"http://localhost:${port}").right.get), HttpClientSyncBackend())
-      client(params)
+      client(params).match {
+        case Value(v) => v
+        case _        => throw new Exception("Unexpected result")
+      }
     }
 }
 
