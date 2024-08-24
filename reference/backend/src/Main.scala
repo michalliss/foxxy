@@ -4,6 +4,7 @@ import foxxy.auth.*
 import foxxy.backend.{Backend, BackendConfig}
 import foxxy.repo.*
 import zio.*
+import zio.logging.slf4j.bridge.Slf4jBridge
 
 import javax.sql.DataSource
 
@@ -22,6 +23,7 @@ object Main extends ZIOAppDefault {
       Repository.live,
       App.live
     )
+    .provideSomeLayer(Slf4jBridge.initialize)
 
   def logic = configurableLogic.provide(Database.postgresFromEnv, BackendConfig.withPort(5004))
 }

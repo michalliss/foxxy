@@ -12,7 +12,7 @@ import zio.test.Assertion.*
 
 import javax.sql.DataSource
 
-object EndToEndSpec extends FoxxySpec {
+object EndToEndSpec extends ZIOSpecDefault {
   def spec = suite("End to end tests")(
     suite("Unauthorized login test")(
       test("Login with invalid credentials should return Unauthorized") {
@@ -36,9 +36,10 @@ object EndToEndSpec extends FoxxySpec {
     )
   ).provide(
     PostgresContainer.layer,
-    TestClient.startOnFreePort(
-      port => Main.configurableLogic.provideSome[DataSource](BackendConfig.withPort(port)),
-      client => client.send(Endpoints.login, LoginRequest("admin", "admin")).unit
-    )
+    TestClient
+      .startOnFreePort(
+        port => Main.configurableLogic.provideSome[DataSource](BackendConfig.withPort(port)),
+        client => client.send(Endpoints.login, LoginRequest("admin", "admin")).unit
+      )
   ) @@ TestAspect.withLiveClock @@ TestAspect.silentLogging
 }
