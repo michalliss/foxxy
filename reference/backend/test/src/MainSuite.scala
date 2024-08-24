@@ -12,7 +12,7 @@ import zio.test.Assertion.*
 
 import javax.sql.DataSource
 
-object EndToEndSpec extends ZIOSpecDefault {
+object EndToEndSpec extends FoxxySpec {
   def spec = suite("End to end tests")(
     suite("Unauthorized login test")(
       test("Login with invalid credentials should return Unauthorized") {
@@ -40,5 +40,5 @@ object EndToEndSpec extends ZIOSpecDefault {
       port => Main.configurableLogic.provideSome[DataSource](BackendConfig.withPort(port)),
       client => client.send(Endpoints.login, LoginRequest("admin", "admin")).unit
     )
-  ) @@ TestAspect.withLiveClock @@ TestAspect.sequential @@ TestAspect.silentLogging
+  ) @@ TestAspect.withLiveClock @@ TestAspect.silentLogging
 }

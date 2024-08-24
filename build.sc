@@ -3,6 +3,7 @@ import mill.scalajslib.api.ModuleKind
 import scalalib._
 import scalajslib._
 import publish._
+import scalafmt._
 
 import $ivy.`com.lihaoyi::mill-contrib-sonatypecentral:`
 import mill.contrib.sonatypecentral.SonatypeCentralPublishModule
@@ -30,12 +31,12 @@ trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
   )
 }
 
-trait AppScalaModule extends ScalaModule with ScalafixModule {
+trait AppScalaModule extends ScalaModule with ScalafixModule with ScalafmtModule {
   def scalaVersion  = config.scalaVersion
   def scalacOptions = Seq("-Wunused:all")
 }
 
-trait AppScalaJSModule extends AppScalaModule with ScalaJSModule with ScalafixModule {
+trait AppScalaJSModule extends AppScalaModule with ScalaJSModule with ScalafixModule with ScalafmtModule {
   def scalaJSVersion = "1.16.0"
   def scalacOptions  = Seq("-Wunused:all")
 }
@@ -60,13 +61,16 @@ object external {
   def zio = Agg(
     ivy"dev.zio::zio:2.1.7",
     ivy"dev.zio::zio-streams:2.1.7",
-    ivy"dev.zio::zio-json:0.7.2"
+    ivy"dev.zio::zio-json:0.7.2",
+    ivy"dev.zio::zio-logging:2.3.0",
+    ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.0"
   )
 
   def zio_js = Agg(
     ivy"dev.zio::zio::2.1.7",
     ivy"dev.zio::zio-streams::2.1.7",
-    ivy"dev.zio::zio-json::0.7.2"
+    ivy"dev.zio::zio-json::0.7.2",
+    ivy"dev.zio::zio-logging::2.3.0"
   )
 
   def quill = Agg(
@@ -150,9 +154,9 @@ object root extends RootModule {
     }
 
     object testing extends AppScalaModule with FoxxyPublish {
-      override def ivyDeps = Agg(
+      override def ivyDeps = external.zio ++ Agg(
+        ivy"dev.zio::zio-test:2.1.7",
         ivy"com.zaxxer:HikariCP:5.1.0",
-        ivy"dev.zio::zio:2.1.7",
         ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.1",
         ivy"org.testcontainers:testcontainers:1.20.1",
         ivy"org.testcontainers:postgresql:1.20.1"
@@ -179,8 +183,7 @@ object root extends RootModule {
           ivy"dev.zio::zio-test-magnolia:2.1.7",
           ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.1",
           ivy"org.testcontainers:testcontainers:1.20.1",
-          ivy"org.testcontainers:postgresql:1.20.1",
-          ivy"org.slf4j:slf4j-nop:2.0.16"
+          ivy"org.testcontainers:postgresql:1.20.1"
         )
       }
     }
