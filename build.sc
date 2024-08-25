@@ -36,7 +36,7 @@ trait AppScalaModule extends ScalaModule with ScalafixModule with ScalafmtModule
   def scalacOptions = Seq("-Wunused:all")
 }
 
-trait AppScalaJSModule extends AppScalaModule with ScalaJSModule with ScalafixModule with ScalafmtModule {
+trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.16.0"
   def scalacOptions  = Seq("-Wunused:all")
 }
