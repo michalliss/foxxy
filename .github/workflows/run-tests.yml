@@ -1,6 +1,9 @@
 name: run-tests
 run-name: Run tests
-on: [push]
+on:
+  push:
+  pull_request:
+    types: [opened, review_requested]
 jobs:
   run-tests:
     runs-on: ubuntu-latest
