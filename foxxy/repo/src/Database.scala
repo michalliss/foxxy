@@ -83,7 +83,7 @@ inline def createEntity[TDb](inline name: String) = {
   quote { querySchema[TDb](name) }
 }
 
-inline def crud[TDb, TDomain](
+inline def crudMap[TDb, TDomain](
     ds: DataSource,
     inline s: Quoted[EntityQuery[TDb]]
 )(implicit ev: MapTo[TDb, TDomain], ev2: MapTo[TDomain, TDb], ev3: WithId[TDomain], ev4: WithId[TDb]) = {
@@ -101,6 +101,33 @@ inline def crud[TDb, TDomain](
         .provide(ZLayer.succeed(ds))
 
     override def insert(x: TDomain): ZIO[Any, SQLException, Long] = run(s.insertValue(lift(x.to)))
+      .provide(ZLayer.succeed(ds))
+
+    override def delete(x: UUID): ZIO[Any, SQLException, Unit] =
+      run(s.filter(_.id == lift(x)).delete)
+        .filterOrFail(_ == 1)(new SQLException("Failed to delete"))
+        .unit
+        .provide(ZLayer.succeed(ds))
+  }
+}
+
+inline def crud[TDb](
+    ds: DataSource,
+    inline s: Quoted[EntityQuery[TDb]]
+)(implicit ev: WithId[TDb]) = {
+  import MyContext.*
+
+  new Crud[TDb, TDb] {
+    override def find(x: UUID): ZIO[Any, SQLException, Option[TDb]] =
+      run(s.filter(_.id == lift(x)))
+        .map(_.headOption)
+        .provide(ZLayer.succeed(ds))
+
+    override def update(x: TDb): ZIO[Any, SQLException, Unit] =
+      run(s.filter(_.id == lift(x.id)).updateValue(lift(x))).unit
+        .provide(ZLayer.succeed(ds))
+
+    override def insert(x: TDb): ZIO[Any, SQLException, Long] = run(s.insertValue(lift(x)))
       .provide(ZLayer.succeed(ds))
 
     override def delete(x: UUID): ZIO[Any, SQLException, Unit] =
