@@ -8,7 +8,7 @@ import scalafmt._
 import $ivy.`com.lihaoyi::mill-contrib-sonatypecentral:`
 import mill.contrib.sonatypecentral.SonatypeCentralPublishModule
 
-import $ivy.`com.goyeau::mill-scalafix::0.4.0`
+import $ivy.`com.goyeau::mill-scalafix::0.4.1`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
@@ -61,7 +61,7 @@ object external {
   def zio = Agg(
     ivy"dev.zio::zio:2.1.9",
     ivy"dev.zio::zio-streams:2.1.9",
-    ivy"dev.zio::zio-json:0.7.2",
+    ivy"dev.zio::zio-json:0.7.3",
     ivy"dev.zio::zio-logging:2.3.1",
     ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.1"
   )
@@ -69,7 +69,7 @@ object external {
   def zio_js = Agg(
     ivy"dev.zio::zio::2.1.9",
     ivy"dev.zio::zio-streams::2.1.9",
-    ivy"dev.zio::zio-json::0.7.2",
+    ivy"dev.zio::zio-json::0.7.3",
     ivy"dev.zio::zio-logging::2.3.1"
   )
 
