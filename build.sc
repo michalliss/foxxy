@@ -8,7 +8,7 @@ import scalafmt._
 import $ivy.`com.lihaoyi::mill-contrib-sonatypecentral:`
 import mill.contrib.sonatypecentral.SonatypeCentralPublishModule
 
-import $ivy.`com.goyeau::mill-scalafix::0.4.0`
+import $ivy.`com.goyeau::mill-scalafix::0.4.1`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
