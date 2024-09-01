@@ -61,7 +61,7 @@ object external {
   def zio = Agg(
     ivy"dev.zio::zio:2.1.8",
     ivy"dev.zio::zio-streams:2.1.8",
-    ivy"dev.zio::zio-json:0.7.2",
+    ivy"dev.zio::zio-json:0.7.3",
     ivy"dev.zio::zio-logging:2.3.1",
     ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.1"
   )
@@ -69,7 +69,7 @@ object external {
   def zio_js = Agg(
     ivy"dev.zio::zio::2.1.8",
     ivy"dev.zio::zio-streams::2.1.8",
-    ivy"dev.zio::zio-json::0.7.2",
+    ivy"dev.zio::zio-json::0.7.3",
     ivy"dev.zio::zio-logging::2.3.1"
   )
 
