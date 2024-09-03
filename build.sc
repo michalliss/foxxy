@@ -79,8 +79,8 @@ object external {
   )
 
   def flyway = Agg(
-    ivy"org.flywaydb:flyway-core:10.17.2",
-    ivy"org.flywaydb:flyway-database-postgresql:10.17.2"
+    ivy"org.flywaydb:flyway-core:10.17.3",
+    ivy"org.flywaydb:flyway-database-postgresql:10.17.3"
   )
 
   def http4s = Agg(
