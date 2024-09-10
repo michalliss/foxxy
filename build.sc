@@ -84,7 +84,7 @@ object external {
   )
 
   def http4s = Agg(
-    ivy"org.http4s::http4s-dsl:0.23.27",
+    ivy"org.http4s::http4s-dsl:0.23.28",
     ivy"org.http4s::http4s-blaze-server:0.23.16"
   )
 
