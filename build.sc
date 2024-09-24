@@ -156,7 +156,7 @@ object root extends RootModule {
     object testing extends AppScalaModule with FoxxyPublish {
       override def ivyDeps = external.zio ++ Agg(
         ivy"dev.zio::zio-test:2.1.9",
-        ivy"com.zaxxer:HikariCP:5.1.0",
+        ivy"com.zaxxer:HikariCP:6.0.0",
         ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.5",
         ivy"org.testcontainers:testcontainers:1.20.1",
         ivy"org.testcontainers:postgresql:1.20.1"
