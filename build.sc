@@ -12,7 +12,7 @@ import $ivy.`com.goyeau::mill-scalafix::0.4.1`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion = "3.5.0"
+  val scalaVersion = "3.5.1"
 }
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
