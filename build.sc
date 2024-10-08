@@ -12,7 +12,8 @@ import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion = "3.5.1"
+  val scalaVersion   = "3.5.1"
+  val scalaJSVersion = "1.17.0"
 }
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
@@ -37,7 +38,7 @@ trait AppScalaModule extends ScalaModule with ScalafixModule with ScalafmtModule
 }
 
 trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
-  def scalaJSVersion = "1.16.0"
+  def scalaJSVersion = config.scalaJSVersion
   def scalacOptions  = Seq("-Wunused:all")
 }
 
@@ -95,8 +96,8 @@ object external {
 
   def frontend = zio_js ++ Agg(
     ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.5",
-    ivy"com.softwaremill.sttp.client3::core::3.9.8",
-    ivy"com.softwaremill.sttp.client3::zio::3.9.8",
+    ivy"com.softwaremill.sttp.client3::core::3.10.0",
+    ivy"com.softwaremill.sttp.client3::zio::3.10.0",
     ivy"com.raquo::laminar::17.1.0",
     ivy"com.raquo::waypoint::8.0.1",
     ivy"io.laminext::websocket::0.17.0",
