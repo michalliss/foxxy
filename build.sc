@@ -96,8 +96,8 @@ object external {
 
   def frontend = zio_js ++ Agg(
     ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.5",
-    ivy"com.softwaremill.sttp.client3::core::3.10.0",
-    ivy"com.softwaremill.sttp.client3::zio::3.10.0",
+    ivy"com.softwaremill.sttp.client3::core::3.10.1",
+    ivy"com.softwaremill.sttp.client3::zio::3.10.1",
     ivy"com.raquo::laminar::17.1.0",
     ivy"com.raquo::waypoint::8.0.1",
     ivy"io.laminext::websocket::0.17.0",
