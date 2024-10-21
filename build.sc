@@ -63,15 +63,15 @@ object external {
     ivy"dev.zio::zio:2.1.9",
     ivy"dev.zio::zio-streams:2.1.9",
     ivy"dev.zio::zio-json:0.7.3",
-    ivy"dev.zio::zio-logging:2.3.1",
-    ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.1"
+    ivy"dev.zio::zio-logging:2.3.2",
+    ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.2"
   )
 
   def zio_js = Agg(
     ivy"dev.zio::zio::2.1.9",
     ivy"dev.zio::zio-streams::2.1.9",
     ivy"dev.zio::zio-json::0.7.3",
-    ivy"dev.zio::zio-logging::2.3.1"
+    ivy"dev.zio::zio-logging::2.3.2"
   )
 
   def quill = Agg(
