@@ -60,16 +60,16 @@ object external {
   )
 
   def zio = Agg(
-    ivy"dev.zio::zio:2.1.9",
-    ivy"dev.zio::zio-streams:2.1.9",
+    ivy"dev.zio::zio:2.1.11",
+    ivy"dev.zio::zio-streams:2.1.11",
     ivy"dev.zio::zio-json:0.7.3",
     ivy"dev.zio::zio-logging:2.3.2",
     ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.2"
   )
 
   def zio_js = Agg(
-    ivy"dev.zio::zio::2.1.9",
-    ivy"dev.zio::zio-streams::2.1.9",
+    ivy"dev.zio::zio::2.1.11",
+    ivy"dev.zio::zio-streams::2.1.11",
     ivy"dev.zio::zio-json::0.7.3",
     ivy"dev.zio::zio-logging::2.3.2"
   )
@@ -156,7 +156,7 @@ object root extends RootModule {
 
     object testing extends AppScalaModule with FoxxyPublish {
       override def ivyDeps = external.zio ++ Agg(
-        ivy"dev.zio::zio-test:2.1.9",
+        ivy"dev.zio::zio-test:2.1.11",
         ivy"com.zaxxer:HikariCP:6.0.0",
         ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
         ivy"org.testcontainers:testcontainers:1.20.2",
@@ -179,9 +179,9 @@ object root extends RootModule {
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
         override def ivyDeps    = Agg(
-          ivy"dev.zio::zio-test:2.1.9",
-          ivy"dev.zio::zio-test-sbt:2.1.9",
-          ivy"dev.zio::zio-test-magnolia:2.1.9",
+          ivy"dev.zio::zio-test:2.1.11",
+          ivy"dev.zio::zio-test-sbt:2.1.11",
+          ivy"dev.zio::zio-test-magnolia:2.1.11",
           ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
           ivy"org.testcontainers:testcontainers:1.20.2",
           ivy"org.testcontainers:postgresql:1.20.2"
