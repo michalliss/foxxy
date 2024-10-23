@@ -159,8 +159,8 @@ object root extends RootModule {
         ivy"dev.zio::zio-test:2.1.11",
         ivy"com.zaxxer:HikariCP:6.0.0",
         ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
-        ivy"org.testcontainers:testcontainers:1.20.2",
-        ivy"org.testcontainers:postgresql:1.20.2"
+        ivy"org.testcontainers:testcontainers:1.20.3",
+        ivy"org.testcontainers:postgresql:1.20.3"
       )
     }
   }
@@ -183,8 +183,8 @@ object root extends RootModule {
           ivy"dev.zio::zio-test-sbt:2.1.11",
           ivy"dev.zio::zio-test-magnolia:2.1.11",
           ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
-          ivy"org.testcontainers:testcontainers:1.20.2",
-          ivy"org.testcontainers:postgresql:1.20.2"
+          ivy"org.testcontainers:testcontainers:1.20.3",
+          ivy"org.testcontainers:postgresql:1.20.3"
         )
       }
     }
