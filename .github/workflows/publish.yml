@@ -17,9 +17,4 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Publish
-        run: ./mill mill.scalalib.PublishModule/ --sonatypeUri https://s01.oss.sonatype.org/service/local
-        env:
-          MILL_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          MILL_PGP_SECRET_BASE64: ${{ secrets.GPG_PRIVATE_KEY }}
-          MILL_SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          MILL_SONATYPE_USERNAME: ${{ secrets.SONATYPE_LOGIN }}
+        run: ./mill -i mill.contrib.sonatypecentral.SonatypeCentralPublishModule/publishAll --username ${{ secrets.SONATYPE_LOGIN }} --password ${{ secrets.SONATYPE_PASSWORD }} --gpgArgs --passphrase=${{ secrets.GPG_PASSPHRASE }},--no-tty,--pinentry-mode,loopback,--batch,--yes,-a,-b --publishArtifacts __.publishArtifacts
