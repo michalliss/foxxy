@@ -18,10 +18,10 @@ object config {
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
 
-  def publishVersion = "0.0.5"
+  def publishVersion = "0.0.6"
 
   def pomSettings = PomSettings(
-    description = "Hello",
+    description = "Foxxy",
     organization = "io.github.michalliss",
     url = "https://github.com/michalliss/foxxy",
     licenses = Seq(License.MIT),
