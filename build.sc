@@ -110,7 +110,7 @@ object external {
   )
 }
 
-object root extends RootModule {
+object `package` extends RootModule {
 
   def devBackend() = T.command {
     reference.backend.runBackground()
