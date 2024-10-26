@@ -13,20 +13,22 @@ import zio.interop.catz.*
 
 type WsServerEndpoint = ZServerEndpoint[Any, ZioStreams & WebSockets]
 
-case class WsBackend(ws: WsServerEndpoint) {
-  val websocketRoutes: (WebSocketBuilder2[Task] => HttpRoutes[Task]) = ZHttp4sServerInterpreter()
-    .fromWebSocket(ws)
-    .toRoutes
+case class WsBackend(config: WsBackendConfig) {
 
-  val serve = for {
-    _ <- ZIO.executor.flatMap(executor =>
-           BlazeServerBuilder[Task]
-             .withExecutionContext(executor.asExecutionContext)
-             .bindHttp(5005, "localhost")
-             .withHttpWebSocketApp(wsb => Router("/" -> websocketRoutes(wsb)).orNotFound)
-             .serve
-             .compile
-             .drain
-         )
-  } yield ()
+  def serve(ws: WsServerEndpoint) = {
+    val websocketRoutes: (WebSocketBuilder2[Task] => HttpRoutes[Task]) = ZHttp4sServerInterpreter()
+      .fromWebSocket(ws)
+      .toRoutes
+    for {
+      _ <- ZIO.executor.flatMap(executor =>
+             BlazeServerBuilder[Task]
+               .withExecutionContext(executor.asExecutionContext)
+               .bindHttp(config.port, "localhost")
+               .withHttpWebSocketApp(wsb => Router("/" -> websocketRoutes(wsb)).orNotFound)
+               .serve
+               .compile
+               .drain
+           )
+    } yield ()
+  }
 }
