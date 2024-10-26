@@ -19,7 +19,6 @@ jobs:
       - name: Publish
         run: >
           ./mill -i mill.scalalib.PublishModule/publishAll
-          __.publishArtifacts
-          ${{ secrets.SONATYPE_LOGIN }}:${{ secrets.SONATYPE_PASSWORD }}
+          --sonatypeCreds ${{ secrets.SONATYPE_LOGIN }}:${{ secrets.SONATYPE_PASSWORD }}
           --gpgArgs --passphrase=${{ secrets.GPG_PASSPHRASE }},--no-tty,--pinentry-mode,loopback,--batch,--yes,-a,-b
           --release true
