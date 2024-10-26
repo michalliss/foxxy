@@ -6,7 +6,7 @@
     pkgs.coreutils
     pkgs.mill
     pkgs.nodejs
-    pkgs.jdk17
+    pkgs.jdk
   ];
 
   services.postgres = {
@@ -19,15 +19,15 @@
     port = 5432;
 
     initialScript = ''
-      CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'postgres' CREATEDB;                                                     
-      CREATE DATABASE postgres;                                                                                          
-      GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;   
+      CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'postgres' CREATEDB;
+      CREATE DATABASE postgres;
+      GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;
     '';
   };
 
   processes = {
-    backend.exec = "mill -i -j 0 -w devBackend";
-    frontend.exec = "mill -i -j 0 -w devFrontend";
+    backend.exec = "./mill -i -w devBackend";
+    frontend.exec = "./mill -i -w devFrontend";
     vite.exec = "cd reference/frontend_vite && npm install && npm run dev";
   };
 }
