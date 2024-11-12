@@ -45,48 +45,48 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
 object external {
 
   def tapir = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.7",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.7"
+    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.9",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.9"
   )
 
   def tapir_js = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.7",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.7"
+    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.9",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.9"
   )
 
   def tapirServer = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.7",
-    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.7"
+    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.9",
+    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.9"
   )
 
   def zio = Agg(
-    ivy"dev.zio::zio:2.1.11",
-    ivy"dev.zio::zio-streams:2.1.11",
+    ivy"dev.zio::zio:2.1.12",
+    ivy"dev.zio::zio-streams:2.1.12",
     ivy"dev.zio::zio-json:0.7.3",
     ivy"dev.zio::zio-logging:2.3.2",
     ivy"dev.zio::zio-logging-slf4j2-bridge:2.3.2"
   )
 
   def zio_js = Agg(
-    ivy"dev.zio::zio::2.1.11",
-    ivy"dev.zio::zio-streams::2.1.11",
+    ivy"dev.zio::zio::2.1.12",
+    ivy"dev.zio::zio-streams::2.1.12",
     ivy"dev.zio::zio-json::0.7.3",
     ivy"dev.zio::zio-logging::2.3.2"
   )
 
   def quill = Agg(
-    ivy"io.getquill::quill-jdbc-zio:4.8.5",
+    ivy"io.getquill::quill-jdbc-zio:4.8.6",
     ivy"org.postgresql:postgresql:42.7.4"
   )
 
   def flyway = Agg(
-    ivy"org.flywaydb:flyway-core:10.20.1",
-    ivy"org.flywaydb:flyway-database-postgresql:10.20.1"
+    ivy"org.flywaydb:flyway-core:10.21.0",
+    ivy"org.flywaydb:flyway-database-postgresql:10.21.0"
   )
 
   def http4s = Agg(
     ivy"org.http4s::http4s-dsl:0.23.29",
-    ivy"org.http4s::http4s-blaze-server:0.23.16"
+    ivy"org.http4s::http4s-blaze-server:0.23.17"
   )
 
   def auth = Agg(
@@ -97,7 +97,7 @@ object external {
   def frontend = zio_js ++ Agg(
     ivy"com.softwaremill.sttp.client3::core::3.10.1",
     ivy"com.softwaremill.sttp.client3::zio::3.10.1",
-    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.7",
+    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.9",
     ivy"com.raquo::laminar::17.1.0",
     ivy"com.raquo::waypoint::8.0.1",
     ivy"io.laminext::websocket::0.17.0",
@@ -156,9 +156,9 @@ object `package` extends RootModule {
 
     object testing extends AppScalaModule with FoxxyPublish {
       override def ivyDeps = external.zio ++ Agg(
-        ivy"dev.zio::zio-test:2.1.11",
-        ivy"com.zaxxer:HikariCP:6.0.0",
-        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
+        ivy"dev.zio::zio-test:2.1.12",
+        ivy"com.zaxxer:HikariCP:6.1.0",
+        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.9",
         ivy"org.testcontainers:testcontainers:1.20.3",
         ivy"org.testcontainers:postgresql:1.20.3"
       )
@@ -179,10 +179,10 @@ object `package` extends RootModule {
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
         override def ivyDeps    = Agg(
-          ivy"dev.zio::zio-test:2.1.11",
-          ivy"dev.zio::zio-test-sbt:2.1.11",
-          ivy"dev.zio::zio-test-magnolia:2.1.11",
-          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.7",
+          ivy"dev.zio::zio-test:2.1.12",
+          ivy"dev.zio::zio-test-sbt:2.1.12",
+          ivy"dev.zio::zio-test-magnolia:2.1.12",
+          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.9",
           ivy"org.testcontainers:testcontainers:1.20.3",
           ivy"org.testcontainers:postgresql:1.20.3"
         )
