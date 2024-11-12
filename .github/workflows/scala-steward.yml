@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # daily
   workflow_dispatch:
 
 name: Scala Steward
@@ -11,12 +11,14 @@ permissions:
 
 jobs:
   scala-steward:
-    runs-on: ubuntu-22.04
-    name: Scala Steward
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Setup mill
-        uses: zhutmost/setup-mill@main
+      - uses: actions/setup-java@v4
         with:
-          mill-version: 0.11.12
-      - name: Scala Steward
-        uses: scala-steward-org/scala-steward-action@v2
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: scala-steward-org/scala-steward-action@v2
+        with:
+          mill-version: 0.12.1
