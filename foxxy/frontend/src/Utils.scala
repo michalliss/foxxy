@@ -14,6 +14,7 @@ import sttp.tapir.{Endpoint, PublicEndpoint}
 import zio.*
 import zio.json.*
 import zio.stream.*
+import io.laminext.websocket.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}
@@ -188,4 +189,22 @@ def makeFrontend[T, R](router: Router[T], renderFn: T => ZIO[R, Throwable, HtmlE
            }
     _   <- ZIO.attempt { render(dom.document.querySelector("#root"), app) }
   } yield ()
+}
+
+def makeWs[ServerMessage: JsonCodec, ClientMessage: JsonCodec](url: String) = {
+  WebSocket
+    .url(url)
+    .receiveText(_.fromJson[ServerMessage].left.map(x => Throwable(x.toString)))
+    .sendText((x: ClientMessage) => x.toJson)
+    .build(managed = true)
+}
+
+class ZioObserver[A](fn: A => ZIO[Any, Throwable, Unit]) extends Observer[A] {
+
+  override def onNext(nextValue: A): Unit = { fn(nextValue).toFutureUnsafe }
+
+  override def onError(err: Throwable): Unit = ()
+
+  override def onTry(nextValue: Try[A]): Unit = nextValue.map(onNext)
+
 }
