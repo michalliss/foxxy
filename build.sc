@@ -12,7 +12,7 @@ import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion   = "3.5.2"
+  val scalaVersion   = "3.3.4"
   val scalaJSVersion = "1.17.0"
 }
 
