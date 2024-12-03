@@ -22,7 +22,7 @@ case class Backend(config: BackendConfig) {
       _ <- ZIO.executor.flatMap(executor =>
              BlazeServerBuilder[Task]
                .withExecutionContext(executor.asExecutionContext)
-               .bindHttp(config.port, "localhost")
+               .bindHttp(config.port, "0.0.0.0")
                .withHttpApp(Router("/" -> (cors)).orNotFound)
                .serve
                .compile
