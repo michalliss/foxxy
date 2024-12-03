@@ -23,7 +23,7 @@ case class WsBackend(config: WsBackendConfig) {
       _ <- ZIO.executor.flatMap(executor =>
              BlazeServerBuilder[Task]
                .withExecutionContext(executor.asExecutionContext)
-               .bindHttp(config.port, "localhost")
+               .bindHttp(config.port, "0.0.0.0")
                .withHttpWebSocketApp(wsb => Router("/" -> websocketRoutes(wsb)).orNotFound)
                .serve
                .compile
