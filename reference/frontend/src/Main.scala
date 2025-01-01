@@ -14,11 +14,13 @@ import pages.LoginPage
 import pages.RegisterPage
 import services.*
 
-enum Page derives JsonCodec:
-  case Home
-  case Login
-  case Register
-  case TodoList
+sealed trait Page derives JsonCodec
+
+object Page:
+  case object Home extends Page
+  case object Login    extends Page
+  case object Register extends Page
+  case object TodoList extends Page
 
 case class HomePage() {
   def render = ZIO.attempt {
