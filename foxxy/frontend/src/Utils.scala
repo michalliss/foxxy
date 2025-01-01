@@ -159,14 +159,11 @@ extension [T](router: Router[T])
   }
 
 def makeRouter[T: JsonCodec](routes: List[Route[? <: T, ?]]): Router[T] =
-  new Router[T](
+  Router[T](
     routes = routes,
-    getPageTitle = _.toString,                                    // mock page title (displayed in the browser tab next to favicon)
-    serializePage = page => page.toJson,                          // serialize page data for storage in History API log
-    deserializePage = pageStr => pageStr.fromJson[T].toOption.get // deserialize the above
-  )(
-    popStateEvents = windowEvents(_.onPopState),
-    owner = unsafeWindowOwner
+    getPageTitle = _.toString,
+    serializePage = page => page.toJson,
+    deserializePage = pageStr => pageStr.fromJson[T].toOption.get
   )
 
 def makeRouter[T: JsonCodec](routes: Route[? <: T, ?]*): Router[T] = makeRouter(routes.toList)
