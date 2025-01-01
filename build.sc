@@ -99,7 +99,7 @@ object external {
     ivy"com.softwaremill.sttp.client3::zio::3.10.1",
     ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.9",
     ivy"com.raquo::laminar::17.1.0",
-    ivy"com.raquo::waypoint::8.0.1",
+    ivy"com.raquo::waypoint::9.0.0",
     ivy"io.laminext::websocket::0.17.0",
     ivy"be.doeraene::web-components-ui5::2.0.0",
     ivy"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
