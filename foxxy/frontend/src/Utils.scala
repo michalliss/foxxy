@@ -75,8 +75,7 @@ extension [T1, T2, T3, T4](endpoint: Endpoint[T1, T2, T3, T4, Any])
           x
             .map(_ match
               case Value(v) => Some(v)
-              case _        => None
-            )
+              case _        => None)
             .mapError(x => SendError.UnknownError(x))
             .someOrFail(SendError.DecodeError)
             .map(x => x)
@@ -92,8 +91,7 @@ extension [T1, T2, T3](endpoint: PublicEndpoint[T1, T2, T3, Any])
         x
           .map(_ match
             case Value(v) => Some(v)
-            case _        => None
-          )
+            case _        => None)
           .map(_.map(x => x.toOption))
           .map(_.flatten)
       )
