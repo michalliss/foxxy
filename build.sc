@@ -76,7 +76,7 @@ object external {
 
   def quill = Agg(
     ivy"io.getquill::quill-jdbc-zio:4.8.6",
-    ivy"org.postgresql:postgresql:42.7.4"
+    ivy"org.postgresql:postgresql:42.7.5"
   )
 
   def flyway = Agg(
