@@ -101,7 +101,7 @@ object external {
     ivy"com.raquo::laminar::17.2.0",
     ivy"com.raquo::waypoint::9.0.0",
     ivy"io.laminext::websocket::0.17.0",
-    ivy"be.doeraene::web-components-ui5::2.0.0",
+    ivy"be.doeraene::web-components-ui5::2.1.0",
     ivy"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
       config.scalaVersion
     ),
