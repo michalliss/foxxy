@@ -17,7 +17,7 @@ import services.*
 sealed trait Page derives JsonCodec
 
 object Page:
-  case object Home extends Page
+  case object Home     extends Page
   case object Login    extends Page
   case object Register extends Page
   case object TodoList extends Page
