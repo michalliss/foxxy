@@ -91,7 +91,7 @@ object external {
 
   def auth = Agg(
     ivy"com.password4j:password4j:1.8.2",
-    ivy"com.auth0:java-jwt:4.4.0"
+    ivy"com.auth0:java-jwt:4.5.0"
   )
 
   def frontend = zio_js ++ Agg(
