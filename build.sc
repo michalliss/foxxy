@@ -159,8 +159,8 @@ object `package` extends RootModule {
         ivy"com.zaxxer:HikariCP:6.2.1",
         ivy"dev.zio::zio-test:2.1.14",
         ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
-        ivy"org.testcontainers:testcontainers:1.20.4",
-        ivy"org.testcontainers:postgresql:1.20.4"
+        ivy"org.testcontainers:testcontainers:1.20.6",
+        ivy"org.testcontainers:postgresql:1.20.6"
       )
     }
   }
@@ -183,8 +183,8 @@ object `package` extends RootModule {
           ivy"dev.zio::zio-test-sbt:2.1.14",
           ivy"dev.zio::zio-test-magnolia:2.1.14",
           ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
-          ivy"org.testcontainers:testcontainers:1.20.4",
-          ivy"org.testcontainers:postgresql:1.20.4"
+          ivy"org.testcontainers:testcontainers:1.20.6",
+          ivy"org.testcontainers:postgresql:1.20.6"
         )
       }
     }
