@@ -106,7 +106,7 @@ object external {
       config.scalaVersion
     ),
     ivy"io.github.cquiroz::scala-java-time::2.6.0",
-    ivy"io.github.kitlangton::animus::0.6.5"
+    ivy"io.github.kitlangton::animus::0.6.8"
   )
 }
 
