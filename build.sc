@@ -45,18 +45,18 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
 object external {
 
   def tapir = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.18",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.18"
   )
 
   def tapir_js = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.18",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.18"
   )
 
   def tapirServer = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.18",
+    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.18"
   )
 
   def zio = Agg(
@@ -97,7 +97,7 @@ object external {
   def frontend = zio_js ++ Agg(
     ivy"com.softwaremill.sttp.client3::core::3.10.2",
     ivy"com.softwaremill.sttp.client3::zio::3.10.2",
-    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.11",
+    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.18",
     ivy"com.raquo::laminar::17.2.0",
     ivy"com.raquo::waypoint::9.0.0",
     ivy"io.laminext::websocket::0.17.0",
@@ -158,7 +158,7 @@ object `package` extends RootModule {
       override def ivyDeps = external.zio ++ Agg(
         ivy"com.zaxxer:HikariCP:6.2.1",
         ivy"dev.zio::zio-test:2.1.14",
-        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
+        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.18",
         ivy"org.testcontainers:testcontainers:1.20.4",
         ivy"org.testcontainers:postgresql:1.20.4"
       )
@@ -182,7 +182,7 @@ object `package` extends RootModule {
           ivy"dev.zio::zio-test:2.1.14",
           ivy"dev.zio::zio-test-sbt:2.1.14",
           ivy"dev.zio::zio-test-magnolia:2.1.14",
-          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
+          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.18",
           ivy"org.testcontainers:testcontainers:1.20.4",
           ivy"org.testcontainers:postgresql:1.20.4"
         )
