@@ -12,8 +12,8 @@ import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion   = "3.3.4"
-  val scalaJSVersion = "1.17.0"
+  val scalaVersion   = "3.3.5"
+  val scalaJSVersion = "1.18.2"
 }
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
@@ -45,43 +45,43 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
 object external {
 
   def tapir = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.19",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.19"
   )
 
   def tapir_js = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.19",
+    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.19"
   )
 
   def tapirServer = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.11",
-    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.11"
+    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.19",
+    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.19"
   )
 
   def zio = Agg(
-    ivy"dev.zio::zio:2.1.14",
-    ivy"dev.zio::zio-streams:2.1.14",
-    ivy"dev.zio::zio-json:0.7.3",
-    ivy"dev.zio::zio-logging:2.4.0",
-    ivy"dev.zio::zio-logging-slf4j2-bridge:2.4.0"
+    ivy"dev.zio::zio:2.1.16",
+    ivy"dev.zio::zio-streams:2.1.16",
+    ivy"dev.zio::zio-json:0.7.39",
+    ivy"dev.zio::zio-logging:2.5.0",
+    ivy"dev.zio::zio-logging-slf4j2-bridge:2.5.0"
   )
 
   def zio_js = Agg(
-    ivy"dev.zio::zio::2.1.14",
-    ivy"dev.zio::zio-streams::2.1.14",
-    ivy"dev.zio::zio-json::0.7.3",
-    ivy"dev.zio::zio-logging::2.4.0"
+    ivy"dev.zio::zio::2.1.16",
+    ivy"dev.zio::zio-streams::2.1.16",
+    ivy"dev.zio::zio-json::0.7.39",
+    ivy"dev.zio::zio-logging::2.5.0"
   )
 
   def quill = Agg(
     ivy"io.getquill::quill-jdbc-zio:4.8.6",
-    ivy"org.postgresql:postgresql:42.7.4"
+    ivy"org.postgresql:postgresql:42.7.5"
   )
 
   def flyway = Agg(
-    ivy"org.flywaydb:flyway-core:10.22.0",
-    ivy"org.flywaydb:flyway-database-postgresql:10.22.0"
+    ivy"org.flywaydb:flyway-core:11.4.0",
+    ivy"org.flywaydb:flyway-database-postgresql:11.4.0"
   )
 
   def http4s = Agg(
@@ -91,22 +91,22 @@ object external {
 
   def auth = Agg(
     ivy"com.password4j:password4j:1.8.2",
-    ivy"com.auth0:java-jwt:4.4.0"
+    ivy"com.auth0:java-jwt:4.5.0"
   )
 
   def frontend = zio_js ++ Agg(
-    ivy"com.softwaremill.sttp.client3::core::3.10.2",
-    ivy"com.softwaremill.sttp.client3::zio::3.10.2",
-    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.11",
+    ivy"com.softwaremill.sttp.client3::core::3.10.3",
+    ivy"com.softwaremill.sttp.client3::zio::3.10.3",
+    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.19",
     ivy"com.raquo::laminar::17.2.0",
     ivy"com.raquo::waypoint::9.0.0",
     ivy"io.laminext::websocket::0.17.0",
-    ivy"be.doeraene::web-components-ui5::2.0.0",
+    ivy"be.doeraene::web-components-ui5::2.1.0",
     ivy"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
       config.scalaVersion
     ),
     ivy"io.github.cquiroz::scala-java-time::2.6.0",
-    ivy"io.github.kitlangton::animus::0.6.5"
+    ivy"io.github.kitlangton::animus::0.6.8"
   )
 }
 
@@ -157,10 +157,10 @@ object `package` extends RootModule {
     object testing extends AppScalaModule with FoxxyPublish {
       override def ivyDeps = external.zio ++ Agg(
         ivy"com.zaxxer:HikariCP:6.2.1",
-        ivy"dev.zio::zio-test:2.1.14",
-        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
-        ivy"org.testcontainers:testcontainers:1.20.4",
-        ivy"org.testcontainers:postgresql:1.20.4"
+        ivy"dev.zio::zio-test:2.1.16",
+        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.19",
+        ivy"org.testcontainers:testcontainers:1.20.6",
+        ivy"org.testcontainers:postgresql:1.20.6"
       )
     }
   }
@@ -179,12 +179,12 @@ object `package` extends RootModule {
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
         override def ivyDeps    = Agg(
-          ivy"dev.zio::zio-test:2.1.14",
-          ivy"dev.zio::zio-test-sbt:2.1.14",
-          ivy"dev.zio::zio-test-magnolia:2.1.14",
-          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.11",
-          ivy"org.testcontainers:testcontainers:1.20.4",
-          ivy"org.testcontainers:postgresql:1.20.4"
+          ivy"dev.zio::zio-test:2.1.16",
+          ivy"dev.zio::zio-test-sbt:2.1.16",
+          ivy"dev.zio::zio-test-magnolia:2.1.16",
+          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.19",
+          ivy"org.testcontainers:testcontainers:1.20.6",
+          ivy"org.testcontainers:postgresql:1.20.6"
         )
       }
     }
