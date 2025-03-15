@@ -11,6 +11,6 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v4
       - name: Compile
-        run: mill __.compile
+        run: ./mill __.compile
       - name: Test
-        run: mill __.test
+        run: ./mill __.test
