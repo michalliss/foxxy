@@ -7,6 +7,7 @@ import mill._
 import mill.scalajslib.api.ModuleKind
 import scalalib._
 import scalajslib._
+import mill.scalajslib.api._
 import publish._
 import scalafmt._
 import publish.*
@@ -114,12 +115,12 @@ object external {
 
 object `package` extends Module {
 
-  def devBackend() = Task.Command {
-    val _ = reference.backend.runBackground(Task.Anon(Args()))
+  def devBackend(): Command[Unit] = Task.Command {
+    reference.backend.run()()
   }
 
-  def devFrontend() = Task.Command {
-    val _ = reference.`frontend_vite`.compile()
+  def devFrontend(): Command[Unit] = Task.Command {
+    reference.`frontend_vite`.compile()()
   }
 
   object foxxy extends Module {
@@ -152,6 +153,9 @@ object `package` extends Module {
 
     object frontend extends AppScalaJSModule with FoxxyPublish {
       override def moduleKind = ModuleKind.ESModule
+
+      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend")
+
       override def moduleDeps                     = Seq(shared.js)
       override def mvnDeps                        = external.frontend
     }
