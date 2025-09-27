@@ -3,8 +3,8 @@ package foxxy.frontend.utils
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.raquo.waypoint.*
+import io.laminext.websocket.*
 import org.scalajs.dom
-import org.scalajs.dom.HTMLDivElement
 import sttp.client3.*
 import sttp.client3.impl.zio.FetchZioBackend
 import sttp.model.Uri
@@ -14,7 +14,6 @@ import sttp.tapir.{Endpoint, PublicEndpoint}
 import zio.*
 import zio.json.*
 import zio.stream.*
-import io.laminext.websocket.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}

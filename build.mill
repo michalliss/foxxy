@@ -1,19 +1,21 @@
+//| mvnDeps:
+//| - com.goyeau::mill-scalafix::0.6.0
+
+package build
+
 import mill._
 import mill.scalajslib.api.ModuleKind
 import scalalib._
 import scalajslib._
 import publish._
 import scalafmt._
+import publish.*
 
-import $ivy.`com.lihaoyi::mill-contrib-sonatypecentral:`
-import mill.contrib.sonatypecentral.SonatypeCentralPublishModule
-
-import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion   = "3.3.5"
-  val scalaJSVersion = "1.18.2"
+  val scalaVersion   = "3.7.3"
+  val scalaJSVersion = "1.20.1"
 }
 
 trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
@@ -44,123 +46,123 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
 
 object external {
 
-  def tapir = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core:1.11.19",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.19"
+  def tapir = Seq(
+    mvn"com.softwaremill.sttp.tapir::tapir-core:1.11.44",
+    mvn"com.softwaremill.sttp.tapir::tapir-json-zio:1.11.44"
   )
 
-  def tapir_js = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-core::1.11.19",
-    ivy"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.19"
+  def tapir_js = Seq(
+    mvn"com.softwaremill.sttp.tapir::tapir-core::1.11.44",
+    mvn"com.softwaremill.sttp.tapir::tapir-json-zio::1.11.44"
   )
 
-  def tapirServer = Agg(
-    ivy"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.19",
-    ivy"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.19"
+  def tapirServer = Seq(
+    mvn"com.softwaremill.sttp.tapir::tapir-http4s-server-zio:1.11.44",
+    mvn"com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.11.44"
   )
 
-  def zio = Agg(
-    ivy"dev.zio::zio:2.1.16",
-    ivy"dev.zio::zio-streams:2.1.16",
-    ivy"dev.zio::zio-json:0.7.39",
-    ivy"dev.zio::zio-logging:2.5.0",
-    ivy"dev.zio::zio-logging-slf4j2-bridge:2.5.0"
+  def zio = Seq(
+    mvn"dev.zio::zio:2.1.21",
+    mvn"dev.zio::zio-streams:2.1.21",
+    mvn"dev.zio::zio-json:0.7.44",
+    mvn"dev.zio::zio-logging:2.5.1",
+    mvn"dev.zio::zio-logging-slf4j2-bridge:2.5.1"
   )
 
-  def zio_js = Agg(
-    ivy"dev.zio::zio::2.1.16",
-    ivy"dev.zio::zio-streams::2.1.16",
-    ivy"dev.zio::zio-json::0.7.39",
-    ivy"dev.zio::zio-logging::2.5.0"
+  def zio_js = Seq(
+    mvn"dev.zio::zio::2.1.21",
+    mvn"dev.zio::zio-streams::2.1.21",
+    mvn"dev.zio::zio-json::0.7.44",
+    mvn"dev.zio::zio-logging::2.5.1"
   )
 
-  def quill = Agg(
-    ivy"io.getquill::quill-jdbc-zio:4.8.6",
-    ivy"org.postgresql:postgresql:42.7.5"
+  def quill = Seq(
+    mvn"io.getquill::quill-jdbc-zio:4.8.6",
+    mvn"org.postgresql:postgresql:42.7.8"
   )
 
-  def flyway = Agg(
-    ivy"org.flywaydb:flyway-core:11.4.0",
-    ivy"org.flywaydb:flyway-database-postgresql:11.4.0"
+  def flyway = Seq(
+    mvn"org.flywaydb:flyway-core:11.13.2",
+    mvn"org.flywaydb:flyway-database-postgresql:11.13.2"
   )
 
-  def http4s = Agg(
-    ivy"org.http4s::http4s-dsl:0.23.30",
-    ivy"org.http4s::http4s-blaze-server:0.23.17"
+  def http4s = Seq(
+    mvn"org.http4s::http4s-dsl:0.23.32",
+    mvn"org.http4s::http4s-blaze-server:0.23.17"
   )
 
-  def auth = Agg(
-    ivy"com.password4j:password4j:1.8.2",
-    ivy"com.auth0:java-jwt:4.5.0"
+  def auth = Seq(
+    mvn"com.password4j:password4j:1.8.4",
+    mvn"com.auth0:java-jwt:4.5.0"
   )
 
-  def frontend = zio_js ++ Agg(
-    ivy"com.softwaremill.sttp.client3::core::3.10.3",
-    ivy"com.softwaremill.sttp.client3::zio::3.10.3",
-    ivy"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.19",
-    ivy"com.raquo::laminar::17.2.0",
-    ivy"com.raquo::waypoint::9.0.0",
-    ivy"io.laminext::websocket::0.17.0",
-    ivy"be.doeraene::web-components-ui5::2.1.0",
-    ivy"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
+  def frontend = zio_js ++ Seq(
+    mvn"com.softwaremill.sttp.client3::core::3.11.0",
+    mvn"com.softwaremill.sttp.client3::zio::3.11.0",
+    mvn"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.44",
+    mvn"com.raquo::laminar::17.2.1",
+    mvn"com.raquo::waypoint::9.0.0",
+    mvn"io.laminext::websocket::0.17.0",
+    mvn"be.doeraene::web-components-ui5::2.12.1",
+    mvn"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
       config.scalaVersion
     ),
-    ivy"io.github.cquiroz::scala-java-time::2.6.0",
-    ivy"io.github.kitlangton::animus::0.6.8"
+    mvn"io.github.cquiroz::scala-java-time::2.6.0",
+    mvn"io.github.kitlangton::animus::0.6.8"
   )
 }
 
-object `package` extends RootModule {
+object `package` extends Module {
 
-  def devBackend() = T.command {
-    reference.backend.runBackground()
+  def devBackend() = Task.Command {
+    val _ = reference.backend.runBackground(Task.Anon(Args()))
   }
 
-  def devFrontend() = T.command {
-    reference.`frontend_vite`.compile()
+  def devFrontend() = Task.Command {
+    val _ = reference.`frontend_vite`.compile()
   }
 
   object foxxy extends Module {
 
     object auth extends AppScalaModule with FoxxyPublish {
-      override def ivyDeps = external.zio ++ external.auth
+      override def mvnDeps = external.zio ++ external.auth
     }
 
     object backend extends AppScalaModule with FoxxyPublish {
       override def moduleDeps = Seq(shared.jvm)
-      override def ivyDeps    =
+      override def mvnDeps    =
         external.zio ++ external.tapir ++ external.tapirServer ++ external.http4s
     }
 
     object repo extends AppScalaModule with FoxxyPublish {
-      override def ivyDeps = external.quill ++ external.flyway
+      override def mvnDeps = external.quill ++ external.flyway
     }
 
     object shared extends Module {
       trait SharedModule extends AppScalaModule with PlatformScalaModule with FoxxyPublish {}
 
       object jvm extends SharedModule {
-        override def ivyDeps = external.zio ++ external.tapir
+        override def mvnDeps = external.zio ++ external.tapir
       }
 
       object js extends SharedModule with AppScalaJSModule {
-        override def ivyDeps = external.zio_js ++ external.tapir_js
+        override def mvnDeps = external.zio_js ++ external.tapir_js
       }
     }
 
     object frontend extends AppScalaJSModule with FoxxyPublish {
-      override def moduleKind: Target[ModuleKind] = ModuleKind.ESModule
+      override def moduleKind = ModuleKind.ESModule
       override def moduleDeps                     = Seq(shared.js)
-      override def ivyDeps                        = external.frontend
+      override def mvnDeps                        = external.frontend
     }
 
     object testing extends AppScalaModule with FoxxyPublish {
-      override def ivyDeps = external.zio ++ Agg(
-        ivy"com.zaxxer:HikariCP:6.2.1",
-        ivy"dev.zio::zio-test:2.1.16",
-        ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.19",
-        ivy"org.testcontainers:testcontainers:1.20.6",
-        ivy"org.testcontainers:postgresql:1.20.6"
+      override def mvnDeps = external.zio ++ Seq(
+        mvn"com.zaxxer:HikariCP:7.0.2",
+        mvn"dev.zio::zio-test:2.1.21",
+        mvn"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.44",
+        mvn"org.testcontainers:testcontainers:1.21.3",
+        mvn"org.testcontainers:postgresql:1.21.3"
       )
     }
   }
@@ -178,13 +180,13 @@ object `package` extends RootModule {
 
       object test extends ScalaTests with TestModule.ZioTest {
         override def moduleDeps = super.moduleDeps ++ Seq(foxxy.testing)
-        override def ivyDeps    = Agg(
-          ivy"dev.zio::zio-test:2.1.16",
-          ivy"dev.zio::zio-test-sbt:2.1.16",
-          ivy"dev.zio::zio-test-magnolia:2.1.16",
-          ivy"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.19",
-          ivy"org.testcontainers:testcontainers:1.20.6",
-          ivy"org.testcontainers:postgresql:1.20.6"
+        override def mvnDeps    = Seq(
+          mvn"dev.zio::zio-test:2.1.21",
+          mvn"dev.zio::zio-test-sbt:2.1.21",
+          mvn"dev.zio::zio-test-magnolia:2.1.21",
+          mvn"com.softwaremill.sttp.tapir::tapir-sttp-client:1.11.44",
+          mvn"org.testcontainers:testcontainers:1.21.3",
+          mvn"org.testcontainers:postgresql:1.21.3"
         )
       }
     }
@@ -194,38 +196,38 @@ object `package` extends RootModule {
 
       object jvm extends SharedModule {
         override def moduleDeps = Seq(foxxy.shared.jvm)
-        override def ivyDeps    = external.zio ++ external.tapir
+        override def mvnDeps    = external.zio ++ external.tapir
       }
 
       object js extends SharedModule with AppScalaJSModule {
         override def moduleDeps = Seq(foxxy.shared.js)
-        override def ivyDeps    = external.zio_js ++ external.tapir_js
+        override def mvnDeps    = external.zio_js ++ external.tapir_js
       }
     }
 
     object frontend extends AppScalaJSModule {
-      override def moduleKind: Target[ModuleKind] = ModuleKind.ESModule
+      override def moduleKind = ModuleKind.ESModule
       override def moduleDeps                     = Seq(shared.js, foxxy.frontend)
-      override def ivyDeps                        = external.frontend
+      override def mvnDeps                        = external.frontend
     }
 
     object frontend_vite extends Module {
       def moduleDeps = Seq(frontend)
 
-      def compile = T {
+      def compile() = Task.Command {
         val jsPath = frontend.fastLinkJS().dest.path
 
-        if (!os.exists(frontend_vite.millSourcePath / "webapp")) {
-          os.makeDir(frontend_vite.millSourcePath / "webapp")
+        if (!os.exists(frontend_vite.moduleDir / "webapp")) {
+          os.makeDir(frontend_vite.moduleDir / "webapp")
         }
         os.copy(
           jsPath / "main.js",
-          frontend_vite.millSourcePath / "webapp" / "main.js",
+          frontend_vite.moduleDir / "webapp" / "main.js",
           replaceExisting = true
         )
         os.copy(
           jsPath / "main.js.map",
-          frontend_vite.millSourcePath / "webapp" / "main.js.map",
+          frontend_vite.moduleDir / "webapp" / "main.js.map",
           replaceExisting = true
         )
       }
