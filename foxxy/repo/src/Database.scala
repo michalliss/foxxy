@@ -17,7 +17,7 @@ object Database {
                db_user     <- System.env("DB_USER").someOrElse("postgres")
                db_password <- System.env("DB_PASSWORD").someOrElse("postgres")
                db_host     <- System.env("DB_HOST").someOrElse("localhost")
-               db_port     <- System.env("DB_PORT").someOrElse("5432")
+               db_port     <- System.env("DB_PORT").someOrElse("54322")
              } yield {
                val props = new Properties()
                props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource")

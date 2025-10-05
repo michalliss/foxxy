@@ -16,7 +16,7 @@
     initialDatabases = [{ name = "postgres"; }];
 
     listen_addresses = "localhost";
-    port = 5432;
+    port = 54322;
 
     initialScript = ''
       CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'postgres' CREATEDB;

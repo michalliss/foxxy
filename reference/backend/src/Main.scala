@@ -25,5 +25,5 @@ object Main extends ZIOAppDefault {
     )
     .provideSomeLayer(Slf4jBridge.initialize)
 
-  def logic = configurableLogic.provide(Database.postgresFromEnv, BackendConfig.withPort(5004))
+  def logic = configurableLogic.provide(Database.postgresFromEnv, BackendConfig.withPort(5004)).debug
 }
