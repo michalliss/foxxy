@@ -116,7 +116,7 @@ object external {
 object `package` extends Module {
 
   def devBackend(): Command[Unit] = Task.Command {
-    reference.backend.run()()
+    reference.backend.runBackground(Task.Anon(Args()))()
   }
 
   def devFrontend(): Command[Unit] = Task.Command {

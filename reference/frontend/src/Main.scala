@@ -30,7 +30,7 @@ case class HomePage() {
     } yield ()).repeat(Schedule.spaced(1.second)).toFutureUnsafe
 
     div(
-      p("Home page 5"),
+      p("Home page"),
       p(
         text <-- ZStream
           .repeatZIOWithSchedule(Random.nextInt, Schedule.spaced(1.second))
