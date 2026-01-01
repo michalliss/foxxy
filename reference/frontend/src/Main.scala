@@ -6,7 +6,7 @@ import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.*
 import foxxy.frontend.utils.*
 import foxxy.reference.frontend.components.myApp
-import foxxy.reference.frontend.pages.{RoomPage, RoomsPage, TodoListPage}
+import foxxy.reference.frontend.pages.{RoomPage, TodoListPage}
 import urldsl.errors.ErrorFromThrowable
 import urldsl.vocabulary.{FromString, Printer}
 import zio.*
@@ -19,7 +19,7 @@ import scala.util.{Failure, Success, Try}
 import pages.LoginPage
 import pages.RegisterPage
 import services.*
-import foxxy.reference.frontend.pages.RoomsPage2
+import foxxy.reference.frontend.pages.RoomsPage
 
 sealed trait Page derives JsonCodec
 
@@ -29,7 +29,6 @@ object Page:
   case object Register      extends Page
   case object TodoList      extends Page
   case object Rooms         extends Page
-  case object Rooms2        extends Page
   case class Room(id: UUID) extends Page
 
 case class HomePage() {
@@ -67,8 +66,7 @@ val router = makeRouter[Page](
     Route.static(Page.Login, root / "login" / endOfSegments),
     Route.static(Page.Register, root / "register" / endOfSegments),
     Route.static(Page.TodoList, root / "todos" / endOfSegments),
-    Route.static(Page.Rooms, root / "rooms" / endOfSegments),
-    Route.static(Page.Rooms2, root / "rooms2" / endOfSegments),
+    Route.static(Page.Rooms, root / "rooms2" / endOfSegments),
     Route[Page.Room, UUID](
       encode = page => page.id,
       decode = arg => Page.Room(arg),
@@ -114,11 +112,11 @@ case class Layout(authSerivce: AuthService) {
             router.navigateTo(Page.Rooms),
             _.selected <-- router.currentPageSignal.map(_ == Page.Rooms)
           ),
-           _.item(
+          _.item(
             _.text := "Rooms2",
             _.icon := IconName.home,
-            router.navigateTo(Page.Rooms2),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Rooms2)
+            router.navigateTo(Page.Rooms),
+            _.selected <-- router.currentPageSignal.map(_ == Page.Rooms)
           ),
           _.slots.fixedItems := SideNavigation.item(
             _.text := "Login",
@@ -161,7 +159,6 @@ def renderPage(page: Page) =
       case Page.Register => ZIO.serviceWithZIO[RegisterPage] { _.create }
       case Page.TodoList => ZIO.serviceWithZIO[TodoListPage] { _ => ZIO.succeed(vDiv(TodoListPage.page())) }
       case Page.Rooms    => ZIO.attempt { vDiv(RoomsPage.page()) }
-      case Page.Rooms2   => ZIO.attempt { vDiv(RoomsPage2.page()) }
       case Page.Room(id) => ZIO.attempt { vDiv(RoomPage.page(id)()) }
     }).flatMap(x => ZIO.serviceWithZIO[Layout] { _.layout(x) })
   }
