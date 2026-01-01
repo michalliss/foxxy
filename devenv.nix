@@ -6,7 +6,7 @@
     pkgs.coreutils
     pkgs.mill
     pkgs.nodejs
-    pkgs.jdk
+    pkgs.jdk25
   ];
 
   services.postgres = {

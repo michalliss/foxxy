@@ -32,3 +32,7 @@ case class WsBackend(config: WsBackendConfig) {
     } yield ()
   }
 }
+
+object WsBackend {
+  val live = ZLayer.derive[WsBackend]
+}

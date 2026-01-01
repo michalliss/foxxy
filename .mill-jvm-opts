@@ -1,4 +1,7 @@
 -XX:+UseG1GC
+-XX:InitialCodeCacheSize=512m
+-XX:ReservedCodeCacheSize=512m
 -XX:+UseCompactObjectHeaders
 -XX:+IgnoreUnrecognizedVMOptions
 -Xmx1024M
+-Xss2m

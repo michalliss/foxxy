@@ -15,7 +15,7 @@ import publish.*
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion   = "3.7.3"
+  val scalaVersion   = "3.7.4"
   val scalaJSVersion = "1.20.1"
 }
 
@@ -37,12 +37,12 @@ trait FoxxyPublish extends PublishModule with SonatypeCentralPublishModule {
 
 trait AppScalaModule extends ScalaModule with ScalafixModule with ScalafmtModule {
   def scalaVersion  = config.scalaVersion
-  def scalacOptions = Seq("-Wunused:all")
+  def scalacOptions = Seq("-Wunused:all", "-Xmax-inlines", "128")
 }
 
 trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = config.scalaJSVersion
-  def scalacOptions  = Seq("-Wunused:all")
+  def scalacOptions  = Seq("-Wunused:all", "-Xmax-inlines", "128")
 }
 
 object external {
@@ -200,12 +200,18 @@ object `package` extends Module {
 
       object jvm extends SharedModule {
         override def moduleDeps = Seq(foxxy.shared.jvm)
-        override def mvnDeps    = external.zio ++ external.tapir
+        override def mvnDeps    = external.zio ++ external.tapir ++ Seq(
+                  mvn"com.softwaremill.sttp.client3::zio:3.10.1",
+                  mvn"com.softwaremill.sttp.tapir::tapir-json-circe:1.11.44"
+        )
       }
 
       object js extends SharedModule with AppScalaJSModule {
         override def moduleDeps = Seq(foxxy.shared.js)
-        override def mvnDeps    = external.zio_js ++ external.tapir_js
+        override def mvnDeps    = external.zio_js ++ external.tapir_js ++ Seq(
+                  mvn"com.softwaremill.sttp.client3::zio::3.10.1",
+                  mvn"com.softwaremill.sttp.tapir::tapir-json-circe::1.11.44"
+        )
       }
     }
 
