@@ -115,6 +115,8 @@ object external {
 
 object `package` extends Module {
 
+  //def fmt = mill.scalalib.scalafmt.ScalafmtModule
+
   def devBackend(): Command[Unit] = Task.Command {
     reference.backend.runBackground(Task.Anon(Args()))()
   }
@@ -244,3 +246,4 @@ object `package` extends Module {
     }
   }
 }
+

@@ -495,8 +495,8 @@ class StateManager2Impl[-R, S, E](initial: S, reducer: (S, E) => ReducerResult[S
                      _                 <- Console.printLine(s"[${java.time.Instant.now()}] Processing event: $f")
                      currentState      <- ZIO.succeed(stateVar.now())
                      (newState, effect) = reducer(currentState, f) match
-                                            case ReducerResult.Pure(s)           => (s, ZIO.none)
-                                            case ReducerResult.Eff(effect)       => (currentState, effect)
+                                            case ReducerResult.Pure(s)       => (s, ZIO.none)
+                                            case ReducerResult.Eff(effect)   => (currentState, effect)
                                             case ReducerResult.Impure(s, ef) => (s, ef)
                      _                 <- effect
                                             .flatMap(_ match
@@ -544,5 +544,5 @@ final class StateManager2[S](initial: S) {
 }
 
 def stateManager[S](initial: S)[E](reducer: (S, E) => ReducerResult[S, E])[R](using r: zio.Runtime[R]) = {
- new StateManager2Impl[R, S, E](initial, reducer)
+  new StateManager2Impl[R, S, E](initial, reducer)
 }

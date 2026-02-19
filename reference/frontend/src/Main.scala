@@ -66,7 +66,7 @@ val router = makeRouter[Page](
     Route.static(Page.Login, root / "login" / endOfSegments),
     Route.static(Page.Register, root / "register" / endOfSegments),
     Route.static(Page.TodoList, root / "todos" / endOfSegments),
-    Route.static(Page.Rooms, root / "rooms2" / endOfSegments),
+    Route.static(Page.Rooms, root / "rooms" / endOfSegments),
     Route[Page.Room, UUID](
       encode = page => page.id,
       decode = arg => Page.Room(arg),
@@ -108,12 +108,6 @@ case class Layout(authSerivce: AuthService) {
           ),
           _.item(
             _.text := "Rooms",
-            _.icon := IconName.home,
-            router.navigateTo(Page.Rooms),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Rooms)
-          ),
-          _.item(
-            _.text := "Rooms2",
             _.icon := IconName.home,
             router.navigateTo(Page.Rooms),
             _.selected <-- router.currentPageSignal.map(_ == Page.Rooms)
