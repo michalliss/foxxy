@@ -1,10 +1,9 @@
 package foxxy.reference.frontend.components
 
 import com.raquo.laminar.api.L.*
-import foxxy.frontend.utils.vDiv
-import zio.*
 import foxxy.frontend.utils.*
 import foxxy.frontend.utils.given
+import zio.*
 
 val listCreator = zioChildAP { _ => (items: Signal[List[String]]) =>
   sealed trait State

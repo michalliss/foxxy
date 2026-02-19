@@ -6,7 +6,7 @@ import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.*
 import foxxy.frontend.utils.*
 import foxxy.reference.frontend.components.myApp
-import foxxy.reference.frontend.pages.{RoomPage, TodoListPage}
+import foxxy.reference.frontend.pages.{RoomPage, RoomsPage, TodoListPage}
 import urldsl.errors.ErrorFromThrowable
 import urldsl.vocabulary.{FromString, Printer}
 import zio.*
@@ -19,7 +19,6 @@ import scala.util.{Failure, Success, Try}
 import pages.LoginPage
 import pages.RegisterPage
 import services.*
-import foxxy.reference.frontend.pages.RoomsPage
 
 sealed trait Page derives JsonCodec
 

@@ -1,20 +1,19 @@
 package foxxy.reference.frontend.pages
 
-import be.doeraene.webcomponents.ui5.UList
+import be.doeraene.webcomponents.ui5.configkeys.{ButtonType, IconName}
+import be.doeraene.webcomponents.ui5.{Form, UList}
 import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.Router
-import foxxy.frontend.utils.ReducerResult.{Pure, Eff}
+import foxxy.frontend.utils.*
+import foxxy.frontend.utils.ReducerResult.{Eff, Pure}
+import foxxy.frontend.utils.given
 import foxxy.reference.frontend.Page
 import foxxy.reference.frontend.services.MyHttpClient
 import foxxy.reference.shared.Domain.Room
 import foxxy.reference.shared.RoomEndpoints
 import zio.*
-import foxxy.frontend.utils.*
-import foxxy.frontend.utils.given
+
 import java.util.UUID
-import be.doeraene.webcomponents.ui5.Form
-import be.doeraene.webcomponents.ui5.configkeys.ButtonType
-import be.doeraene.webcomponents.ui5.configkeys.IconName
 
 object RoomsPage {
   val page = zchild:
