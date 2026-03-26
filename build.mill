@@ -65,20 +65,37 @@ object external {
   def zio = Seq(
     mvn"dev.zio::zio:2.1.21",
     mvn"dev.zio::zio-streams:2.1.21",
+    mvn"dev.zio::zio-schema:1.8.3",
     mvn"dev.zio::zio-json:0.7.44",
     mvn"dev.zio::zio-logging:2.5.1",
     mvn"dev.zio::zio-logging-slf4j2-bridge:2.5.1"
   )
 
+  def zio_http = Seq(
+    mvn"dev.zio::zio-http:3.10.1",
+    mvn"dev.zio::zio-http-gen:3.10.1"
+  )
+
+  def zio_http_js = Seq(
+    mvn"dev.zio::zio-http::3.10.1"
+  )
+
   def zio_js = Seq(
     mvn"dev.zio::zio::2.1.21",
     mvn"dev.zio::zio-streams::2.1.21",
+    mvn"dev.zio::zio-schema::1.8.3",
     mvn"dev.zio::zio-json::0.7.44",
     mvn"dev.zio::zio-logging::2.5.1"
   )
 
   def quill = Seq(
     mvn"io.getquill::quill-jdbc-zio:4.8.6",
+    mvn"org.postgresql:postgresql:42.7.8"
+  )
+
+  def scalasql = Seq(
+    mvn"com.zaxxer:HikariCP:7.0.2",
+    mvn"com.lihaoyi::scalasql-simple:0.3.0",
     mvn"org.postgresql:postgresql:42.7.8"
   )
 
@@ -97,14 +114,12 @@ object external {
     mvn"com.auth0:java-jwt:4.5.0"
   )
 
-  def frontend = zio_js ++ Seq(
-    mvn"com.softwaremill.sttp.client3::core::3.11.0",
-    mvn"com.softwaremill.sttp.client3::zio::3.11.0",
-    mvn"com.softwaremill.sttp.tapir::tapir-sttp-client::1.11.44",
+  def frontend = zio_js ++ zio_http_js ++ Seq(
     mvn"com.raquo::laminar::17.2.1",
     mvn"com.raquo::waypoint::9.0.0",
     mvn"io.laminext::websocket::0.17.0",
     mvn"be.doeraene::web-components-ui5::2.12.1",
+    mvn"io.github.nguyenyou::webawesome-laminar::3.0.0",
     mvn"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
       config.scalaVersion
     ),
@@ -133,23 +148,27 @@ object `package` extends Module {
 
     object backend extends AppScalaModule with FoxxyPublish {
       override def moduleDeps = Seq(shared.jvm)
-      override def mvnDeps    =
-        external.zio ++ external.tapir ++ external.tapirServer ++ external.http4s
+      override def mvnDeps    = external.zio ++ external.zio_http
+    }
+
+    object wsbackend extends AppScalaModule with FoxxyPublish {
+      override def moduleDeps = Seq(shared.jvm)
+      override def mvnDeps    =  external.zio ++ external.zio_http
     }
 
     object repo extends AppScalaModule with FoxxyPublish {
-      override def mvnDeps = external.quill ++ external.flyway
+      override def mvnDeps = external.zio ++ external.scalasql ++ external.flyway
     }
 
     object shared extends Module {
       trait SharedModule extends AppScalaModule with PlatformScalaModule with FoxxyPublish {}
 
       object jvm extends SharedModule {
-        override def mvnDeps = external.zio ++ external.tapir
+        override def mvnDeps = external.zio ++ external.zio_http
       }
 
       object js extends SharedModule with AppScalaJSModule {
-        override def mvnDeps = external.zio_js ++ external.tapir_js
+        override def mvnDeps = external.zio_js ++ external.zio_http_js
       }
     }
 
@@ -157,6 +176,24 @@ object `package` extends Module {
       override def moduleKind = ModuleKind.ESModule
 
       override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend")
+
+      override def moduleDeps                     = Seq(shared.js, frontend_elements)
+      override def mvnDeps                        = external.frontend
+    }
+
+    object frontend_elements extends AppScalaJSModule with FoxxyPublish {
+      override def moduleKind = ModuleKind.ESModule
+
+      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend_elements")
+
+      override def moduleDeps                     = Seq(shared.js)
+      override def mvnDeps                        = external.frontend
+    }
+
+     object frontend_zio extends AppScalaJSModule with FoxxyPublish {
+      override def moduleKind = ModuleKind.ESModule
+
+      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend_elements")
 
       override def moduleDeps                     = Seq(shared.js)
       override def mvnDeps                        = external.frontend
@@ -171,6 +208,7 @@ object `package` extends Module {
         mvn"org.testcontainers:postgresql:1.21.3"
       )
     }
+
   }
 
   object reference extends Module {
@@ -178,6 +216,7 @@ object `package` extends Module {
     object backend extends AppScalaModule {
       override def moduleDeps = Seq(
         foxxy.backend,
+        foxxy.wsbackend,
         foxxy.shared.jvm,
         foxxy.repo,
         foxxy.auth,
@@ -202,27 +241,19 @@ object `package` extends Module {
 
       object jvm extends SharedModule {
         override def moduleDeps = Seq(foxxy.shared.jvm)
-        override def mvnDeps    = external.zio ++ external.tapir ++ Seq(
-                  mvn"com.softwaremill.sttp.client3::zio:3.10.1",
-                  mvn"com.softwaremill.sttp.tapir::tapir-json-circe:1.11.44"
-        )
+        override def mvnDeps    = external.zio ++ external.zio_http
       }
 
       object js extends SharedModule with AppScalaJSModule {
         override def moduleDeps = Seq(foxxy.shared.js)
-        override def mvnDeps    = external.zio_js ++ external.tapir_js ++ Seq(
-                  mvn"com.softwaremill.sttp.client3::zio::3.10.1",
-                  mvn"com.softwaremill.sttp.tapir::tapir-json-circe::1.11.44"
-        )
+        override def mvnDeps    = external.zio_js ++ external.zio_http_js
       }
     }
 
     object frontend extends AppScalaJSModule {
       override def moduleKind = ModuleKind.ESModule
-      override def moduleDeps                     = Seq(shared.js, foxxy.frontend)
-      override def mvnDeps                        = external.frontend ++ Seq(
-        mvn"dev.zio::zio-blocks-scope::0.0.23"
-      )
+      override def moduleDeps                     = Seq(shared.js, foxxy.frontend, foxxy.frontend_elements, foxxy.frontend_zio)
+      override def mvnDeps                        = external.frontend
     }
 
     object frontend_vite extends Module {
@@ -246,6 +277,6 @@ object `package` extends Module {
         )
       }
     }
-  }
+   }
 }
 

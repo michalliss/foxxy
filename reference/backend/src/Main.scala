@@ -1,8 +1,9 @@
 package foxxy.reference.backend
 
 import foxxy.auth.*
-import foxxy.backend.{Backend, BackendConfig, WsBackend, WsBackendConfig}
+import foxxy.backend.{Backend, BackendConfig}
 import foxxy.repo.*
+import foxxy.wsbackend.{WsBackend, WsBackendConfig}
 import zio.*
 import zio.logging.slf4j.bridge.Slf4jBridge
 
@@ -16,13 +17,10 @@ object Main extends ZIOAppDefault {
     .serviceWithZIO[App](_.logic)
     .provideSome[DataSource & BackendConfig & WsBackendConfig](
       Backend.live,
-      Database.postgres,
       Database.Migration.live,
-      Schema.live,
+      Database.client,
       AuthService.live,
-      Repository.live,
       App.live,
-      RoomRepository.live,
       WsBackend.live
     )
     .provideSomeLayer(Slf4jBridge.initialize)

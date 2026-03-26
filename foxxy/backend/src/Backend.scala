@@ -1,33 +1,25 @@
 package foxxy.backend
 
-import org.http4s.*
-import org.http4s.blaze.server.BlazeServerBuilder
-import org.http4s.server.Router
-import org.http4s.server.middleware.CORS
-import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
-import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import zio.*
-import zio.interop.catz.*
+import zio.http.*
+import zio.http.Header.AccessControlAllowOrigin
+import zio.http.Middleware.{CorsConfig, cors}
+import zio.http.endpoint.*
+import zio.http.endpoint.openapi.{OpenAPIGen, SwaggerUI}
 
 case class Backend(config: BackendConfig) {
-  def serve(routes: List[FoxxyServerEndpoint]) = {
-    val docs                        = SwaggerInterpreter().fromServerEndpoints[Task](routes, "app", "1.0.0")
-    val allRoutes: HttpRoutes[Task] = ZHttp4sServerInterpreter().from(routes ++ docs).toRoutes
+  def serve(
+      endpoints: List[Endpoint[?, ?, ?, ?, ?]],
+      routes: Chunk[Route[Any, Response]]
+  ) = {
+    val corsConfig    = CorsConfig(allowedOrigin = _ => Some(AccessControlAllowOrigin.All))
+    val openAPI       = OpenAPIGen.fromEndpoints(title = "API", version = "1.0", endpoints)
+    val swaggerRoutes = SwaggerUI.routes("docs", openAPI)
 
-    val cors = CORS.policy.withAllowOriginAll.withAllowMethodsAll
-      .withAllowCredentials(false)
-      .apply(allRoutes)
+    val allRoutes = (Routes(routes) ++ swaggerRoutes) @@ cors(corsConfig)
 
     for {
-      _ <- ZIO.executor.flatMap(executor =>
-             BlazeServerBuilder[Task]
-               .withExecutionContext(executor.asExecutionContext)
-               .bindHttp(config.port, "0.0.0.0")
-               .withHttpApp(Router("/" -> (cors)).orNotFound)
-               .serve
-               .compile
-               .drain
-           )
+      _ <- Server.serve(allRoutes).provide(Server.defaultWithPort(config.port))
     } yield ()
   }
 }

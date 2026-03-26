@@ -3,5 +3,5 @@
 -XX:ReservedCodeCacheSize=512m
 -XX:+UseCompactObjectHeaders
 -XX:+IgnoreUnrecognizedVMOptions
--Xmx2048M
+-Xmx4096M
 -Xss2m

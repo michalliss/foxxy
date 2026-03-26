@@ -1,12 +1,10 @@
 package foxxy.reference.frontend
 
-import be.doeraene.webcomponents.ui5.configkeys.IconName
-import be.doeraene.webcomponents.ui5.{Button, ShellBar, SideNavigation}
 import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.*
 import foxxy.frontend.utils.*
-import foxxy.reference.frontend.components.myApp
-import foxxy.reference.frontend.pages.{RoomPage, RoomsPage, TodoListPage}
+import foxxy.frontend_elements.Divs.*
+import foxxy.frontend_zio.ZioLaminar.*
 import urldsl.errors.ErrorFromThrowable
 import urldsl.vocabulary.{FromString, Printer}
 import zio.*
@@ -23,20 +21,12 @@ import services.*
 sealed trait Page derives JsonCodec
 
 object Page:
-  case object Home          extends Page
-  case object Login         extends Page
-  case object Register      extends Page
-  case object TodoList      extends Page
-  case object Rooms         extends Page
-  case class Room(id: UUID) extends Page
+  case object Home     extends Page
+  case object Login    extends Page
+  case object Register extends Page
 
 case class HomePage() {
   def render = ZIO.attempt {
-    (for {
-      fr <- Fiber.roots
-      _  <- Console.printLine(s"Roots: ${fr.size}")
-    } yield ()).repeat(Schedule.spaced(1.second)).toFutureUnsafe
-
     div(
       p("Home page"),
       p(
@@ -63,80 +53,27 @@ val router = makeRouter[Page](
   List(
     Route.static(Page.Home, root / endOfSegments),
     Route.static(Page.Login, root / "login" / endOfSegments),
-    Route.static(Page.Register, root / "register" / endOfSegments),
-    Route.static(Page.TodoList, root / "todos" / endOfSegments),
-    Route.static(Page.Rooms, root / "rooms" / endOfSegments),
-    Route[Page.Room, UUID](
-      encode = page => page.id,
-      decode = arg => Page.Room(arg),
-      pattern = root / "room" / segment[UUID] / endOfSegments
-    )
+    Route.static(Page.Register, root / "register" / endOfSegments)
   )
 )
 
 case class Layout(authSerivce: AuthService) {
   def layout(content: HtmlElement) = ZIO.attempt {
     val toggleCollapseBus: EventBus[Unit] = new EventBus
-    val collapsedSignal                   = toggleCollapseBus.events.scanLeft(false)((collapsed, _) => !collapsed)
+    toggleCollapseBus.events.scanLeft(false)((collapsed, _) => !collapsed)
     vDiv(
-      ShellBar(
-        _.primaryTitle      := "Foxxy TODO Reference App",
-        _.showCoPilot       := true,
-        _.slots.startButton := Button(
-          _.icon := IconName.menu,
-          _.events.onClick.mapTo(()) --> toggleCollapseBus.writer
-        ),
-        _.slots.profile     := div(
-          authSerivce.isLoggedIn
-        )
-      ),
-      hDiv(
-        SideNavigation(
-          _.collapsed <-- collapsedSignal,
-          _.item(
-            _.text := "Home",
-            _.icon := IconName.home,
-            router.navigateTo(Page.Home),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Home)
-          ),
-          _.item(
-            _.text := "Todos",
-            _.icon := IconName.home,
-            router.navigateTo(Page.TodoList),
-            _.selected <-- router.currentPageSignal.map(_ == Page.TodoList)
-          ),
-          _.item(
-            _.text := "Rooms",
-            _.icon := IconName.home,
-            router.navigateTo(Page.Rooms),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Rooms)
-          ),
-          _.slots.fixedItems := SideNavigation.item(
-            _.text := "Login",
-            _.icon := IconName.`user-settings`,
-            router.navigateTo(Page.Login),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Login)
-          ),
-          _.slots.fixedItems := SideNavigation.item(
-            _.text := "Register",
-            _.icon := IconName.`user-settings`,
-            router.navigateTo(Page.Register),
-            _.selected <-- router.currentPageSignal.map(_ == Page.Register)
-          ),
-          _.slots.fixedItems := SideNavigation.item(
-            _.text := "Logout",
-            _.icon := IconName.error,
-            onClick --> { _ => authSerivce.logout },
-            _.href := router.absoluteUrlForPage(Page.Home)
-          )
-        ),
-        content
-      )
+      content
     )
   }
 }
 
-import foxxy.frontend.utils.given
+
+import scala.scalajs.js
+import scala.scalajs.js.annotation.JSImport
+@JSImport("@awesome.me/webawesome/dist/styles/webawesome.css", JSImport.Namespace)
+@js.native
+object Stylesheet extends js.Object
+val _ = Stylesheet
 
 def renderPage(page: Page) =
   zioComponent {
@@ -144,15 +81,11 @@ def renderPage(page: Page) =
       case Page.Home     =>
         ZIO.attempt {
           vDiv(
-            "Home page",
-            myApp()
+            "Home page"
           )
         }
       case Page.Login    => ZIO.serviceWithZIO[LoginPage] { _.create }
       case Page.Register => ZIO.serviceWithZIO[RegisterPage] { _.create }
-      case Page.TodoList => ZIO.serviceWithZIO[TodoListPage] { _ => ZIO.succeed(vDiv(TodoListPage.page())) }
-      case Page.Rooms    => ZIO.attempt { vDiv(RoomsPage.page()) }
-      case Page.Room(id) => ZIO.attempt { vDiv(RoomPage.page(id)()) }
     }).flatMap(x => ZIO.serviceWithZIO[Layout] { _.layout(x) })
   }
 
@@ -161,9 +94,7 @@ object App extends ZIOAppDefault {
     .provide(
       ZLayer.derive[LoginPage],
       ZLayer.derive[RegisterPage],
-      ZLayer.derive[TodoListPage],
       ZLayer.derive[Storage],
-      ZLayer.derive[MyHttpClient],
       ZLayer.succeed(router),
       ZLayer.derive[Layout],
       ZLayer.derive[AuthService],

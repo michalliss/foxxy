@@ -1,4 +1,4 @@
-package foxxy.backend
+package foxxy.wsbackend
 
 import zio.*
 
