@@ -1,7 +1,7 @@
 package foxxy.reference.frontend.pages
 import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.Router
-import foxxy.frontend_zio.ZioLaminar.*
+import foxxy.frontend_all.*
 import foxxy.reference.frontend.Page
 import foxxy.reference.frontend.services.Storage
 import io.github.nguyenyou.webawesome.laminar.*
@@ -16,6 +16,7 @@ case class LoginPage(storage: Storage, router: Router[Page]) {
   }
 
   def create = ZIO.attempt {
+    io.github.nguyenyou.webawesome.laminar.
     Button()("WebAwesome")
   }
 

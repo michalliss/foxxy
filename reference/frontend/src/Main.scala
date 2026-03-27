@@ -2,9 +2,7 @@ package foxxy.reference.frontend
 
 import com.raquo.laminar.api.L.*
 import com.raquo.waypoint.*
-import foxxy.frontend.utils.*
-import foxxy.frontend_elements.Divs.*
-import foxxy.frontend_zio.ZioLaminar.*
+import foxxy.frontend_all.*
 import urldsl.errors.ErrorFromThrowable
 import urldsl.vocabulary.{FromString, Printer}
 import zio.*

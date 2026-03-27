@@ -15,7 +15,7 @@ import publish.*
 import com.goyeau.mill.scalafix.ScalafixModule
 
 object config {
-  val scalaVersion   = "3.8.2"
+  val scalaVersion   = "3.8.3-RC3"
   val scalaJSVersion = "1.20.2"
 }
 
@@ -118,7 +118,7 @@ object external {
     mvn"com.raquo::laminar::17.2.1",
     mvn"com.raquo::waypoint::9.0.0",
     mvn"io.laminext::websocket::0.17.0",
-    mvn"be.doeraene::web-components-ui5::2.12.1",
+    // mvn"be.doeraene::web-components-ui5::2.12.1",
     mvn"io.github.nguyenyou::webawesome-laminar::3.0.0",
     mvn"org.scala-js::scalajs-java-securerandom::1.0.0".withDottyCompat(
       config.scalaVersion
@@ -193,9 +193,18 @@ object `package` extends Module {
      object frontend_zio extends AppScalaJSModule with FoxxyPublish {
       override def moduleKind = ModuleKind.ESModule
 
-      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend_elements")
+      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend_zio")
 
       override def moduleDeps                     = Seq(shared.js)
+      override def mvnDeps                        = external.frontend
+    }
+
+    object frontend_all extends AppScalaJSModule with FoxxyPublish {
+      override def moduleKind = ModuleKind.ESModule
+
+      override def moduleSplitStyle = ModuleSplitStyle.SmallModulesFor("frontend_all")
+
+      override def moduleDeps                     = Seq(shared.js, frontend, frontend_elements, frontend_zio)
       override def mvnDeps                        = external.frontend
     }
 
@@ -252,7 +261,7 @@ object `package` extends Module {
 
     object frontend extends AppScalaJSModule {
       override def moduleKind = ModuleKind.ESModule
-      override def moduleDeps                     = Seq(shared.js, foxxy.frontend, foxxy.frontend_elements, foxxy.frontend_zio)
+      override def moduleDeps                     = Seq(shared.js, foxxy.frontend_all)
       override def mvnDeps                        = external.frontend
     }
 
